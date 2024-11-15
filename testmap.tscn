@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkimfbbcv85rx"]
+[gd_scene load_steps=5 format=3 uid="uid://bkimfbbcv85rx"]
+
+[ext_resource type="PackedScene" uid="uid://dduvx6o0kigcy" path="res://player.tscn" id="1_fsrcr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ii63"]
 
@@ -30,3 +32,6 @@ use_collision = true
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6)
 use_collision = true
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("1_fsrcr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
