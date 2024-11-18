@@ -6,6 +6,8 @@ const MOUSE_SENSITIVITY_X : float = 0.2
 const MOUSE_SENSITIVITY_Y : float = 0.1
 # will be toggled false when player should not be moving (like when in text input)
 var moving : bool = true
+# will be true if paused
+var paused : bool = false
 
 # constructor
 func _ready() -> void:
@@ -14,9 +16,14 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	# if the player presses pause key, pause the game
-	if Input.is_action_just_pressed("pause"):
+	if Input.is_action_just_pressed("pause") and !paused:
 		moving = false
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		paused = true
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and paused: 
+		moving = true
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		paused = false
 	# only move if player is supposed to be moving
 	if moving:
 		keymovement(delta)
