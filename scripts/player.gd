@@ -17,12 +17,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# if the player presses pause key, pause the game
 	if Input.is_action_just_pressed("pause") and !paused:
+		# disable movement
 		moving = false
+		# release the mouse
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		# toggle paused
 		paused = true
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and paused: 
+	# if the game is already paused, resume the game when window clicked on
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and paused:
+		# re-enable movement
 		moving = true
+		# capture the mouse
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		# game no longer paused
 		paused = false
 	# only move if player is supposed to be moving
 	if moving:
@@ -45,7 +52,8 @@ func _input(event: InputEvent) -> void:
 func keymovement(delta):
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		pass
+		# velocity += get_gravity() * delta
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
