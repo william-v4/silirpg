@@ -63,4 +63,4 @@ light_color = Color(0.988254, 0.669384, 0.548441, 1)
 light_energy = 2.063
 
 [node name="player" parent="." instance=ExtResource("2_paixg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 46, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 23, -13)
