@@ -1,18 +1,23 @@
 extends CharacterBody3D
-# physics variables
+# main stats
+var networth : int = 0 # amount of money player has
+var energy : int = 100 # energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
+
+# physics weights
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY_X : float = 0.2
 const MOUSE_SENSITIVITY_Y : float = 0.1
-# will be toggled false when player should not be moving (like when in text input)
-var moving : bool = true
-# will be true if paused
-var paused : bool = false
+
+var moving : bool = true # will be toggled false when player should not be moving (like when in text input)
+var paused : bool = false # will be true if paused
 
 # constructor
 func _ready() -> void:
 	# capture player mouse for camera movement
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# reset initial energy
+	updateenergy(100)
 
 func _physics_process(delta: float) -> void:
 	# if the player presses pause key, pause the game
@@ -34,6 +39,11 @@ func _physics_process(delta: float) -> void:
 	# only move if player is supposed to be moving
 	if moving:
 		keymovement(delta)
+
+# updates energy
+func updateenergy(value : int):
+	energy = value
+	$HUD/energy.update(value)
 
 # runs whenever input is received (mouse, keyboard, controller)
 func _input(event: InputEvent) -> void:

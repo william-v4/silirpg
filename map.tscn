@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=4 uid="uid://jdw2d8nt7v7x"]
 
-[ext_resource type="Material" uid="uid://c32odyi2s5kww" path="res://assets/water.tres" id="1_g07ml"]
+[ext_resource type="Material" uid="uid://c32odyi2s5kww" path="res://assets/materials/water.tres" id="1_g07ml"]
 [ext_resource type="PackedScene" uid="uid://dduvx6o0kigcy" path="res://player.tscn" id="2_paixg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vga47"]
@@ -63,4 +63,4 @@ light_color = Color(0.988254, 0.669384, 0.548441, 1)
 light_energy = 2.063
 
 [node name="player" parent="." instance=ExtResource("2_paixg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 23, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 53, -13)
