@@ -1,6 +1,6 @@
 extends CharacterBody3D
 # main stats
-var networth : int = 0 # amount of money player has
+var networth = 0 # amount of money player has
 var energy : int = 100 # energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 
 # physics weights
@@ -40,10 +40,27 @@ func _physics_process(delta: float) -> void:
 	if moving:
 		keymovement(delta)
 
-# updates energy
+# setters
+# updates energy (set to new value)
 func updateenergy(value : int):
 	energy = value
+	# update UI to match
 	$HUD/energy.update(value)
+# changes energy (change by amount)
+func changenergy(amount : int):
+	energy += amount
+	# update UI to match
+	$HUD/energy.update(energy)
+# updates networth (sets to new value)
+func updatenetworth(value):
+	networth = value
+	# update UI to match
+	$HUD/networth.update(value)
+# changes networth (change by amount)
+func transaction(amount):
+	networth += amount
+	# update UI to match
+	$HUD/networth.update(networth)
 
 # runs whenever input is received (mouse, keyboard, controller)
 func _input(event: InputEvent) -> void:

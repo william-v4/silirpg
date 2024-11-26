@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dduvx6o0kigcy"]
+[gd_scene load_steps=10 format=3 uid="uid://dduvx6o0kigcy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3pt3x"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_fdk8d"]
+[ext_resource type="Script" path="res://scripts/networthcounter.gd" id="3_26lne"]
 [ext_resource type="Texture2D" uid="uid://bl4vd0b1dins2" path="res://assets/icons/circularbar.svg" id="3_c7wn4"]
 [ext_resource type="Script" path="res://scripts/energylevelbar.gd" id="4_4yp1e"]
 [ext_resource type="Texture2D" uid="uid://cvepg486rv5ur" path="res://assets/icons/energy.svg" id="5_6dtwm"]
@@ -12,7 +13,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_jnwcv"]
 font = ExtResource("2_fdk8d")
-font_size = 18
+font_size = 24
 
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3pt3x")
@@ -47,6 +48,7 @@ grow_horizontal = 0
 text = "net worth: $#############"
 label_settings = SubResource("LabelSettings_jnwcv")
 horizontal_alignment = 2
+script = ExtResource("3_26lne")
 
 [node name="energy" type="TextureProgressBar" parent="HUD"]
 layout_mode = 1
