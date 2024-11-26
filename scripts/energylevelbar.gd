@@ -1,7 +1,10 @@
 extends TextureProgressBar
-const HIGH_COLOUR = Color(0, 1, 0.6) # TEAL
-const LOW_COLOUR = Color(1, 0.25, 0) # ORANGE-RED
-const UPDATE_DELAY = 0.1 # weight (in seconds) used to smoothen out bar update
+## counter colour at 100
+@export var HIGH_COLOUR = Color(0, 1, 0.6) # TEAL
+## counter colour at 0
+@export var LOW_COLOUR = Color(1, 0.25, 0) # ORANGE-RED
+## how much to delay (in seconds) when incrementing for a smoother transition
+@export var UPDATE_DELAY = 0.1
 var targetvalue : int # value for smooth updating of progressbar (stored outside of update() or else there will be inaccuracies from clashing functions)
 
 # Called when the node enters the scene tree for the first time.

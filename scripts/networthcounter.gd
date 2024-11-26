@@ -1,8 +1,11 @@
 extends Label
-const GAIN_COLOUR = Color(.5, 1, .5) # pastel green
-const LOSS_COLOUR = Color(1, .75, .25) # pastel orange
-const OVERDRAFT_COLOUR = Color(1, 0, 0) # red
-var targetnetworth # to store new networth to increment to
+## counter flashes this colour when increasing
+@export var GAIN_COLOUR = Color(.5, 1, .5) # pastel green
+## counter flashes this colour when decreasing
+@export var LOSS_COLOUR = Color(1, .75, .25) # pastel orange
+## counter flashes this colour when in the negatives
+@export var OVERDRAFT_COLOUR = Color(1, 0, 0) # red
+var targetnetworth = 0 # to store new networth to increment to
 var value = 0 # current value shown by counter
 
 # Called when the node enters the scene tree for the first time.

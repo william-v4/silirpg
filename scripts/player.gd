@@ -4,10 +4,10 @@ var networth = 0 # amount of money player has
 var energy : int = 100 # energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 
 # physics weights
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-const MOUSE_SENSITIVITY_X : float = 0.2
-const MOUSE_SENSITIVITY_Y : float = 0.1
+@export var SPEED = 5.0
+@export var JUMP_VELOCITY = 4.5
+@export var MOUSE_SENSITIVITY_X : float = 0.2
+@export var MOUSE_SENSITIVITY_Y : float = 0.1
 
 var moving : bool = true # will be toggled false when player should not be moving (like when in text input)
 var paused : bool = false # will be true if paused
