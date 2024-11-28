@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=4 uid="uid://jdw2d8nt7v7x"]
+[gd_scene load_steps=11 format=4 uid="uid://jdw2d8nt7v7x"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_6usqn"]
 [ext_resource type="Material" uid="uid://c32odyi2s5kww" path="res://assets/materials/water.tres" id="1_g07ml"]
 [ext_resource type="PackedScene" uid="uid://dduvx6o0kigcy" path="res://player.tscn" id="2_paixg"]
+[ext_resource type="PackedScene" uid="uid://ckno10iy5hxd8" path="res://jensen.tscn" id="4_01t23"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_upnxb"]
 
@@ -65,4 +66,7 @@ light_color = Color(0.988254, 0.669384, 0.548441, 1)
 light_energy = 2.063
 
 [node name="player" parent="." instance=ExtResource("2_paixg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 13, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -13)
+
+[node name="jensen" parent="." instance=ExtResource("4_01t23")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -6)

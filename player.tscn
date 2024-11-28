@@ -120,12 +120,8 @@ focus_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vu7vu")
 theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
-text = "[type][color=#35cca3]character [/color]
-when the impostor is sus
-
-[color=cornflowerblue]character 2 [/color]
-sus is the impostor among us
-[/type]"
+text = "[type][color=lightgray]Jensen[/color]
+Hello there, what brings you here?"
 scroll_following = true
 custom_effects = [SubResource("RichTextEffect_gocvl")]
 selection_enabled = true
