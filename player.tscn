@@ -134,4 +134,6 @@ script = ExtResource("8_oeg4c")
 [node name="typing" type="Timer" parent="HUD/dialogue"]
 one_shot = true
 
+[node name="fatigue" type="Timer" parent="."]
+
 [connection signal="value_changed" from="HUD/energy" to="HUD/energy" method="_on_value_changed"]
