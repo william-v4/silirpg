@@ -54,7 +54,7 @@ offset_top = 16.0
 offset_right = -16.0
 offset_bottom = 39.0
 grow_horizontal = 0
-text = "net worth: $#############"
+text = "$#############"
 label_settings = SubResource("LabelSettings_jnwcv")
 horizontal_alignment = 2
 script = ExtResource("3_26lne")
@@ -120,7 +120,7 @@ focus_mode = 2
 theme_override_fonts/normal_font = ExtResource("7_vu7vu")
 theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
-text = "[type][color=lightgray]Jensen[/color]
+text = "[type][color=black]Jensen[/color]
 Hello there, what brings you here?"
 scroll_following = true
 custom_effects = [SubResource("RichTextEffect_gocvl")]

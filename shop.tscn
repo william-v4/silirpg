@@ -1,0 +1,116 @@
+[gd_scene load_steps=12 format=3 uid="uid://b0h585th5qarv"]
+
+[ext_resource type="Texture2D" uid="uid://cies3y8viif1b" path="res://assets/icons/serverforge.svg" id="1_hljau"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_osiex"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tnro0"]
+material = SubResource("StandardMaterial3D_osiex")
+size = Vector2(8, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ongpf"]
+size = Vector3(0, 4, 8)
+
+[sub_resource type="Gradient" id="Gradient_d0unb"]
+colors = PackedColorArray(0.645445, 0.659771, 0.50475, 1, 0.646557, 0.73849, 0.258389, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4ds68"]
+gradient = SubResource("Gradient_d0unb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n4e5c"]
+albedo_color = Color(0.489622, 0.489622, 0.489622, 1)
+albedo_texture = SubResource("GradientTexture1D_4ds68")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1kvgj"]
+flip_faces = true
+size = Vector2(8, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_345di"]
+size = Vector3(2, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0646v"]
+emission_enabled = true
+emission = Color(0.98937, 0.946117, 0.844616, 1)
+backlight = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ssoia"]
+material = SubResource("StandardMaterial3D_0646v")
+
+[node name="shop" type="StaticBody3D"]
+
+[node name="floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_tnro0")
+
+[node name="left" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2, 0)
+mesh = SubResource("BoxMesh_ongpf")
+
+[node name="right" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2, 0)
+mesh = SubResource("BoxMesh_ongpf")
+
+[node name="back" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 2, 4)
+mesh = SubResource("BoxMesh_ongpf")
+
+[node name="roof" type="CSGCombiner3D" parent="."]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="roof"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4, 0)
+radius = 4.0
+height = 8.0
+sides = 16
+material = SubResource("StandardMaterial3D_n4e5c")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="roof"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+operation = 2
+size = Vector3(8, 4, 8)
+
+[node name="ceiling" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = SubResource("PlaneMesh_1kvgj")
+
+[node name="logo" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -4.01)
+flip_h = true
+texture = ExtResource("1_hljau")
+
+[node name="table" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.5)
+mesh = SubResource("BoxMesh_345di")
+
+[node name="lights" type="Node3D" parent="."]
+
+[node name="light" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4, -2)
+mesh = SubResource("SphereMesh_ssoia")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights/light"]
+omni_range = 22.523
+
+[node name="light2" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -2)
+mesh = SubResource("SphereMesh_ssoia")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights/light2"]
+omni_range = 22.523
+
+[node name="light3" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4, 2)
+mesh = SubResource("SphereMesh_ssoia")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights/light3"]
+omni_range = 22.523
+
+[node name="light4" type="MeshInstance3D" parent="lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, 2)
+mesh = SubResource("SphereMesh_ssoia")
+skeleton = NodePath("../..")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights/light4"]
+omni_range = 22.523

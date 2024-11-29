@@ -15,7 +15,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# always make sure label text matches value
-	text = "net worth: $" + str(value)
+	text = "$" + str(value)
 	# watch if there is a new value. if there is, slowly increment counter to new value (for visual effect)
 	if targetnetworth != value: 
 		# if new value is increase

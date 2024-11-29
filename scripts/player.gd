@@ -4,7 +4,7 @@ var networth = 0 # amount of money player has
 var energy : int = 100 # energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 
 # physics weights
-@export var SPEED = 5.0
+@export var SPEED = 8
 @export var JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY_X : float = 0.2
 @export var MOUSE_SENSITIVITY_Y : float = 0.1
