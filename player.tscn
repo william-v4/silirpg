@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://dduvx6o0kigcy"]
+[gd_scene load_steps=19 format=3 uid="uid://dduvx6o0kigcy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3pt3x"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_fdk8d"]
+[ext_resource type="Script" path="res://scripts/3d_cursor.gd" id="2_xu6od"]
 [ext_resource type="Script" path="res://scripts/networthcounter.gd" id="3_26lne"]
 [ext_resource type="Texture2D" uid="uid://bl4vd0b1dins2" path="res://assets/icons/circularbar.svg" id="3_c7wn4"]
 [ext_resource type="Script" path="res://scripts/energylevelbar.gd" id="4_4yp1e"]
@@ -9,6 +10,7 @@
 [ext_resource type="FontFile" uid="uid://pn1pxdevyrj6" path="res://assets/fonts/Montserrat-Light.ttf" id="7_vu7vu"]
 [ext_resource type="Script" path="res://scripts/typingeffect.gd" id="8_a72g1"]
 [ext_resource type="Script" path="res://scripts/dialoguebox.gd" id="8_oeg4c"]
+[ext_resource type="FontFile" uid="uid://bl40gboy7y7uk" path="res://assets/fonts/Montserrat-Bold.ttf" id="10_8qyx8"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j2l5r"]
 
@@ -24,6 +26,12 @@ font = ExtResource("2_fdk8d")
 [sub_resource type="RichTextEffect" id="RichTextEffect_gocvl"]
 script = ExtResource("8_a72g1")
 
+[sub_resource type="LabelSettings" id="LabelSettings_tvywy"]
+font = ExtResource("2_fdk8d")
+
+[sub_resource type="LabelSettings" id="LabelSettings_3l5yq"]
+font = ExtResource("10_8qyx8")
+
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3pt3x")
 
@@ -32,6 +40,13 @@ shape = SubResource("CapsuleShape3D_j2l5r")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.499937, 0)
+
+[node name="3D cursor" type="RayCast3D" parent="Camera3D"]
+target_position = Vector3(0, 0, -4)
+collision_mask = 2
+hit_from_inside = true
+collide_with_areas = true
+script = ExtResource("2_xu6od")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_i7htu")
@@ -44,7 +59,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="networth" type="Label" parent="HUD"]
+[node name="balance" type="Label" parent="HUD"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -129,6 +144,32 @@ script = ExtResource("8_oeg4c")
 
 [node name="typing" type="Timer" parent="HUD/dialogue"]
 one_shot = true
+
+[node name="systemmessages" type="Label" parent="HUD"]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 316.0
+offset_bottom = 39.0
+text = "[system] all your servers have crashed"
+label_settings = SubResource("LabelSettings_tvywy")
+
+[node name="tooltip" type="Label" parent="HUD"]
+modulate = Color(1, 1, 1, 0.501961)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "click to interact"
+label_settings = SubResource("LabelSettings_3l5yq")
 
 [node name="fatigue" type="Timer" parent="."]
 

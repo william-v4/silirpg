@@ -1,7 +1,9 @@
 extends CharacterBody3D
 # main stats
-var networth = 0 # amount of money player has
-var energy : int = 100 # energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
+## amount of money player has
+var balance : float = 0
+## energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
+var energy : int = 100
 
 # physics weights
 @export var SPEED = 8
@@ -9,17 +11,103 @@ var energy : int = 100 # energy (aka stamina). Consumed by moving and doing task
 @export var MOUSE_SENSITIVITY_X : float = 0.2
 @export var MOUSE_SENSITIVITY_Y : float = 0.1
 
-var moving : bool = true # will be toggled false when player should not be moving (like when in text input)
-var paused : bool = false # will be true if paused
 
-# constructor
+## will be toggled false when player should not be moving (like when in text input or task)
+var moving : bool = true
+## will be true if paused
+var paused : bool = false
+## will be emitted when player clicks on an interactable object (along with the object in question)
+signal interact(interactable : Node3D)
+## the datacenter the player just purchased and is now holding
+var datacenter_in_hand = datacenter.serversizes.SMALL
+
+# run as soon as node enters scene
 func _ready() -> void:
+	# hide unused UI elements
+	$HUD/dialogue.visible = false
+	$HUD/systemmessages.visible = false
+	$HUD/tooltip.visible = false
 	# capture player mouse for camera movement
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	# reset initial energy
-	updateenergy(100)
+	
+## constructor
+## [param energy] initial energy
+## [param balance] initial balance
+func init(energy : int, balance : float):
+	updateenergy(energy)
+	updatebalance(balance)
 
 func _physics_process(delta: float) -> void:
+	#if $"Camera3D/3D cursor".is_colliding():
+		#$HUD/tooltip.visible = true
+		#print($"Camera3D/3D cursor".get_collider())
+	#else:
+		#$HUD/tooltip.visible = false
+	# toggle for raycast debugging
+	# print($"Camera3D/3D cursor".get_collider())
+	# check if player wants to pause
+	pauser()
+	# only move if player is supposed to be moving
+	if moving:
+		keymovement(delta)
+		# for player interactions
+		interactor()
+
+# runs whenever input is received (mouse, keyboard, controller)
+func _input(event: InputEvent) -> void:
+	# cruns when moving is enabled and mouse moves
+	if ((event is InputEventMouseMotion) and moving):
+		# camera movement
+		cammovement(event)
+
+# check if player is facing an object to interact with
+func interactor():
+	# get the object the player is facing
+	var interactable = $"Camera3D/3D cursor".get_collider()
+	#  if the player is facing an interactable object (not null)
+	if interactable:
+		# if that object is a slot to build a datacenter (named "buildspot")
+		if"buildspot" in interactable.name:
+			# change the UI tooltip accordingly
+			$HUD/tooltip.text = "click to build"
+		# otherwise, use the default
+		else:
+			$HUD/tooltip.text = "click to interact"
+		# show the tooltip
+		$HUD/tooltip.visible = true
+		# and if the player clicks to interact with the object (and is allowed to move and not paused)
+		if Input.is_action_just_released("click") and moving and !paused:
+			# tell the map that the player decides to interact with this object
+			interact.emit(interactable)
+	# if there is no interactable object, leave the tooltip hidden
+	else:
+		$HUD/tooltip.visible = false
+	
+
+# setters
+# updates energy (set to new value)
+func updateenergy(value : int):
+	energy = value
+	# update UI to match
+	$HUD/energy.update(value)
+# changes energy (change by amount)
+func changenergy(amount : int):
+	energy += amount
+	# update UI to match
+	$HUD/energy.update(energy)
+# updates balance (sets to new value)
+func updatebalance(value):
+	balance = value
+	# update UI to match
+	$HUD/balance.update(value)
+# changes balance (change by amount)
+func transaction(amount):
+	balance += amount
+	# update UI to match
+	$HUD/balance.update(balance)
+
+# for checking if the player wants to pause
+func pauser():
 	# if the player presses pause key, pause the game
 	if Input.is_action_just_pressed("pause") and !paused:
 		# disable movement
@@ -36,48 +124,10 @@ func _physics_process(delta: float) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		# game no longer paused
 		paused = false
-	# only move if player is supposed to be moving
-	if moving:
-		keymovement(delta)
-
-# setters
-# updates energy (set to new value)
-func updateenergy(value : int):
-	energy = value
-	# update UI to match
-	$HUD/energy.update(value)
-# changes energy (change by amount)
-func changenergy(amount : int):
-	energy += amount
-	# update UI to match
-	$HUD/energy.update(energy)
-# updates networth (sets to new value)
-func updatenetworth(value):
-	networth = value
-	# update UI to match
-	$HUD/networth.update(value)
-# changes networth (change by amount)
-func transaction(amount):
-	networth += amount
-	# update UI to match
-	$HUD/networth.update(networth)
-
-# runs whenever input is received (mouse, keyboard, controller)
-func _input(event: InputEvent) -> void:
-	# camera movement with mouse
-	if ((event is InputEventMouseMotion) and moving):
-		# camera to be moved
-		var camera = $Camera3D
-		# rotate the player left and right (about y axis)
-		rotate_y(-deg_to_rad(event.relative.x) * MOUSE_SENSITIVITY_X)
-		# rotate camera up and down (about x axis)
-		camera.rotate_x(-deg_to_rad(event.relative.y) * MOUSE_SENSITIVITY_Y)
-		# make sure player doesn't break neck (rotate camera vertically over 90 degrees)
-		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
 
 # for wasd + space
 func keymovement(delta):
-	# Add the gravity.
+	# add gravity to velocity (reminder gravity accelerates with time, so multiply by delta)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	# Handle jump
@@ -94,3 +144,16 @@ func keymovement(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 	move_and_slide()
+
+## camera movement based on mouse
+## [param event] passed by _input() loop
+func cammovement(event : InputEvent):
+	# camera to be moved
+	var camera = $Camera3D
+	# rotate the player left and right (about y axis) based on mouse movement in x axis
+	rotate_y(-deg_to_rad(event.relative.x) * MOUSE_SENSITIVITY_X)
+	# rotate camera up and down (about x axis) based on mouse movement in y axis
+	camera.rotate_x(-deg_to_rad(event.relative.y) * MOUSE_SENSITIVITY_Y)
+	# make sure player doesn't break neck (rotate camera vertically over 90 degrees)
+	camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
+	# check if the player is facing an interactible object

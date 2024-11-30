@@ -53,6 +53,11 @@ click={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="physics"
+3d_physics/layer_2="interactions"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
