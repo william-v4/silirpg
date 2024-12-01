@@ -15,7 +15,7 @@ func _ready():
 	#instance.init(instance.serversizes.SMALL)
 	#add_child(instance)
 	# initiate (constructor) the player
-	$player.init(100, 100)
+	$player.init(100, 400)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

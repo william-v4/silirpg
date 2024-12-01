@@ -21,20 +21,26 @@ var paused : bool = false
 ## will be emitted when player clicks on an interactable object (along with the object in question)
 signal interact(interactable : Node3D)
 ## the datacenter the player just purchased and is now holding
-@export var datacenter_in_hand = datacenter.serversizes.LARGE
+@export var datacenter_in_hand = null
 ## inventory
 var inventory = {
 	food.type.COFFEE: 0,
 	food.type.SALAD: 0,
 	food.type.NOODLES: 0
 }
+# tooltip node so we don't have to type path every time
+@export var tooltipnode : Label
+# energy needed to build datacenter
+@export var BUILD_ENERGY := 20
 
 # run as soon as node enters scene
 func _ready() -> void:
+	# tooltip node
+	tooltipnode = $HUD/tooltip
 	# hide unused UI elements
 	$HUD/dialogue.hide()
 	$HUD/systemmessages.hide()
-	$HUD/tooltip.hide()
+	tooltipnode.hide()
 	# capture player mouse for camera movement
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
@@ -69,25 +75,56 @@ func interactor():
 	var interactable = $"Camera3D/3D cursor".get_collider()
 	#  if the player is facing an interactable object (not null)
 	if interactable:
-		# if that object is a slot to build a datacenter (named "buildspot")
-		if"buildspot" in interactable.name:
-			# change the UI tooltip accordingly
-			$HUD/tooltip.text = "click to build"
-		# otherwise, use the default
-		else:
-			$HUD/tooltip.text = "click to interact"
 		# show the tooltip
-		$HUD/tooltip.show()
-		# and if the player clicks to interact with the object (and is allowed to move and not paused)
-		if Input.is_action_just_released("click") and moving and !paused:
-			# tell the map that the player decides to interact with this object
-			interact.emit(interactable)
-			# add build to total
-			xp += 1
+		tooltipnode.show()
+		# if that object is a slot to build a datacenter (named "buildspot")
+		if "buildspot" in interactable.name:
+			# change the UI tooltip accordingly
+			tooltipnode.text = "click to build"
+		# otherwise, use the default
+			# and if the player clicks to interact with the object (and is allowed to move and not paused)
+			if Input.is_action_just_released("click") and moving and !paused:
+				# tell the map that the player decides to interact with this object
+				interact.emit(interactable)
+				# add build to total
+				xp += 1
+				# take energy
+				changenergy(-BUILD_ENERGY)
+		# for the shop items
+		elif "product" in interactable.name:
+			if datacenter_in_hand == null:
+				if "S" in interactable.name:
+					shopchecker(interactable, datacenter.serversizes.SMALL)
+				elif "M" in interactable.name:
+					shopchecker(interactable, datacenter.serversizes.MEDIUM)
+				elif "L" in interactable.name:
+					shopchecker(interactable, datacenter.serversizes.LARGE)
+			else:
+				tooltipnode.text = "already holding a server"
+		elif "sellbin" in interactable.name:
+			tooltipnode.text = "click to sell"
+			if Input.is_action_just_released("click") and moving and !paused:
+				if datacenter_in_hand != null:
+					transaction(datacenter.prices[datacenter_in_hand])
+					datacenter_in_hand = null
+					$HUD/inventory.update()
+		else:
+			tooltipnode.text = "click to interact"
 	# if there is no interactable object, leave the tooltip hidden
 	else:
-		$HUD/tooltip.hide()
+		tooltipnode.hide()
 	
+func shopchecker(interactable : Node3D, size : datacenter.serversizes):
+	if balance >= float(datacenter.prices[size]):
+		tooltipnode.text = "click to buy"
+		if Input.is_action_just_released("click") and moving and !paused:
+			datacenter_in_hand = size
+			transaction(-datacenter.prices[size])
+			$HUD/inventory.update()
+	elif balance < float(datacenter.prices[size]):
+		tooltipnode.text = "insufficient funds"
+	else:
+		tooltipnode.hide()
 
 #region setters
 # updates energy (set to new value)

@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://scripts/dialoguebox.gd" id="8_oeg4c"]
 [ext_resource type="FontFile" uid="uid://bl40gboy7y7uk" path="res://assets/fonts/Montserrat-Bold.ttf" id="10_8qyx8"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="12_5amul"]
+[ext_resource type="Texture2D" uid="uid://b3g3qe4yf088c" path="res://assets/icons/server.svg" id="13_enrfy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j2l5r"]
 
@@ -36,10 +37,6 @@ font = ExtResource("10_8qyx8")
 [sub_resource type="LabelSettings" id="LabelSettings_2j68d"]
 font = ExtResource("7_vu7vu")
 font_size = 32
-
-[sub_resource type="LabelSettings" id="LabelSettings_rl6qc"]
-font = ExtResource("2_fdk8d")
-font_size = 20
 
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3pt3x")
@@ -192,7 +189,7 @@ offset_bottom = -32.0
 grow_vertical = 0
 script = ExtResource("12_5amul")
 
-[node name="datacenter" type="HBoxContainer" parent="HUD/inventory"]
+[node name="datacenter" type="Control" parent="HUD/inventory"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -204,17 +201,27 @@ offset_top = -40.0
 offset_right = 32.0
 grow_horizontal = 2
 grow_vertical = 0
-alignment = 1
+
+[node name="servericon" type="Sprite2D" parent="HUD/inventory/datacenter"]
+position = Vector2(16, 19)
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("13_enrfy")
 
 [node name="servertype" type="Label" parent="HUD/inventory/datacenter"]
-layout_mode = 2
-text = "S  "
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+text = "M"
 label_settings = SubResource("LabelSettings_2j68d")
-
-[node name="value" type="Label" parent="HUD/inventory/datacenter"]
-layout_mode = 2
-text = "1"
-label_settings = SubResource("LabelSettings_rl6qc")
 
 [node name="fatigue" type="Timer" parent="."]
 

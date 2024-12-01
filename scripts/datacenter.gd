@@ -12,10 +12,20 @@ const labels : Dictionary = {
 	serversizes.MEDIUM: "M",
 	serversizes.LARGE: "L"
 }
+## prices
+const prices : Dictionary = {
+	serversizes.SMALL: 100,
+	serversizes.MEDIUM: 200,
+	serversizes.LARGE: 300
+}
 ## color of label when server online
 @export var ONLINE_COLOUR = Color(0, 0.75, 0.5) # green
 ## color of label when server offline
 @export var OFFLINE_COLOUR = Color(1, 0.75, 0) # yellow
+## server size
+var serversize : serversizes
+## price
+var price : int
 ## whether the server is online or not (money is only made if it's online)
 var online : bool = false
 ## server disk usage
@@ -50,6 +60,8 @@ func status(online : bool):
 
 # populate datacenters with server racks based on size
 func buildracks(size : serversizes):
+	serversize = size
+	price = prices[size]
 	# store the rack object to instance
 	var rackscene : PackedScene
 	# and their positions
