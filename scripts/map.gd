@@ -42,3 +42,5 @@ func _on_player_interact(interactable):
 		interactable.free()
 		# the player now no longer has a datacenter in hand
 		$player.datacenter_in_hand = null
+		# and tell player inventory UI about this change
+		$player/HUD/inventory.update()

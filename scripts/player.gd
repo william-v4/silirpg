@@ -5,13 +5,14 @@ class_name player
 var balance : float = 0
 ## energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 var energy : int = 100
+## servers built in total
+var xp : int = 0
 
 # physics weights
 @export var SPEED = 8
 @export var JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY_X : float = 0.2
 @export var MOUSE_SENSITIVITY_Y : float = 0.1
-
 
 ## will be toggled false when player should not be moving (like when in text input or task)
 var moving : bool = true
@@ -21,13 +22,19 @@ var paused : bool = false
 signal interact(interactable : Node3D)
 ## the datacenter the player just purchased and is now holding
 @export var datacenter_in_hand = datacenter.serversizes.LARGE
+## inventory
+var inventory = {
+	food.type.COFFEE: 0,
+	food.type.SALAD: 0,
+	food.type.NOODLES: 0
+}
 
 # run as soon as node enters scene
 func _ready() -> void:
 	# hide unused UI elements
-	$HUD/dialogue.visible = false
-	$HUD/systemmessages.visible = false
-	$HUD/tooltip.visible = false
+	$HUD/dialogue.hide()
+	$HUD/systemmessages.hide()
+	$HUD/tooltip.hide()
 	# capture player mouse for camera movement
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
@@ -39,11 +46,6 @@ func init(energy : int, balance : float):
 	updatebalance(balance)
 
 func _physics_process(delta: float) -> void:
-	#if $"Camera3D/3D cursor".is_colliding():
-		#$HUD/tooltip.visible = true
-		#print($"Camera3D/3D cursor".get_collider())
-	#else:
-		#$HUD/tooltip.visible = false
 	# toggle for raycast debugging
 	# print($"Camera3D/3D cursor".get_collider())
 	# check if player wants to pause
@@ -75,17 +77,19 @@ func interactor():
 		else:
 			$HUD/tooltip.text = "click to interact"
 		# show the tooltip
-		$HUD/tooltip.visible = true
+		$HUD/tooltip.show()
 		# and if the player clicks to interact with the object (and is allowed to move and not paused)
 		if Input.is_action_just_released("click") and moving and !paused:
 			# tell the map that the player decides to interact with this object
 			interact.emit(interactable)
+			# add build to total
+			xp += 1
 	# if there is no interactable object, leave the tooltip hidden
 	else:
-		$HUD/tooltip.visible = false
+		$HUD/tooltip.hide()
 	
 
-# setters
+#region setters
 # updates energy (set to new value)
 func updateenergy(value : int):
 	energy = value
@@ -106,7 +110,21 @@ func transaction(amount):
 	balance += amount
 	# update UI to match
 	$HUD/balance.update(balance)
+# changes inventory (changes by item, by amount)
+func changeinventory(item, amount : int):
+	# change item amount
+	inventory[item] += amount
+	# tell inventory GUI about it
+	$HUD/inventory.update()
+# updates inventory (sets amount of item)
+func updateinventory(item, amount : int):
+	# set item amount
+	inventory[item] = amount
+	# tell inventory GUI about it
+	$HUD/inventory.update()
+#endregion
 
+#region movement
 # for checking if the player wants to pause
 func pauser():
 	# if the player presses pause key, pause the game
@@ -158,3 +176,4 @@ func cammovement(event : InputEvent):
 	# make sure player doesn't break neck (rotate camera vertically over 90 degrees)
 	camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
 	# check if the player is facing an interactible object
+#endregion

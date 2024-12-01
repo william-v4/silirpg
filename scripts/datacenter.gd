@@ -7,7 +7,7 @@ enum serversizes {
 	LARGE
 }
 ## server size labels
-var labels : Dictionary = {
+const labels : Dictionary = {
 	serversizes.SMALL: "S",
 	serversizes.MEDIUM: "M",
 	serversizes.LARGE: "L"
