@@ -1,10 +1,11 @@
 extends Node3D
 
-## makes some things more verbose and some textures lower quality for easier debugging
-@export var DEBUG = true
+##  lower quality textures for quicker debugging
+@export var DEBUG = false
+## datacenter object for instancing
 var datacenterscene = preload("res://datacenter.tscn")
 
-# Called when the node enters the scene tree for the first time.
+# Called when the node enters the scene tree for the first time
 func _ready():
 	if !DEBUG: 
 		# restore water quality

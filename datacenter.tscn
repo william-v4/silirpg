@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://dxapnf35m8hqi"]
+[gd_scene load_steps=25 format=3 uid="uid://dxapnf35m8hqi"]
 
 [ext_resource type="Script" path="res://scripts/datacenter.gd" id="1_dkrvl"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_ubchb"]
 [ext_resource type="PackedScene" uid="uid://cr3ovxdd00ml5" path="res://rack_s.tscn" id="3_4aggr"]
+[ext_resource type="PackedScene" uid="uid://ce20i0jeryxo1" path="res://rack_l.tscn" id="4_iuvsa"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ej83"]
 albedo_color = Color(0, 0, 0, 1)
@@ -192,4 +193,10 @@ visible = false
 
 [node name="rack S3" parent="." instance=ExtResource("3_4aggr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 2)
+visible = false
+
+[node name="payment" type="Timer" parent="."]
+
+[node name="rack l" parent="." instance=ExtResource("4_iuvsa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.653599, 2)
 visible = false

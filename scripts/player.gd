@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name player
 # main stats
 ## amount of money player has
 var balance : float = 0
@@ -19,7 +20,7 @@ var paused : bool = false
 ## will be emitted when player clicks on an interactable object (along with the object in question)
 signal interact(interactable : Node3D)
 ## the datacenter the player just purchased and is now holding
-var datacenter_in_hand = datacenter.serversizes.SMALL
+@export var datacenter_in_hand = datacenter.serversizes.LARGE
 
 # run as soon as node enters scene
 func _ready() -> void:
