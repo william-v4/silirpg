@@ -20,4 +20,5 @@ func _process(delta):
 
 # when player presses on it
 func _on_pressed():
+	# emit deletion signal
 	get_parent().deletion.emit(self)

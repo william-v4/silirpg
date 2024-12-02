@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dduvx6o0kigcy"]
+[gd_scene load_steps=26 format=3 uid="uid://dduvx6o0kigcy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3pt3x"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_fdk8d"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cit0pbj2lf0hv" path="res://assets/icons/coffee.png" id="14_42sgm"]
 [ext_resource type="Texture2D" uid="uid://cs4nuv3ics0ja" path="res://assets/icons/noodles.png" id="15_7ei50"]
 [ext_resource type="Texture2D" uid="uid://c2gw2oi3ylhce" path="res://assets/icons/salad.svg" id="16_c531r"]
+[ext_resource type="AudioStream" uid="uid://bpmyxhcumdx0u" path="res://assets/audio/silirpg-intro.mp3" id="17_3w47c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j2l5r"]
 
@@ -328,7 +329,10 @@ size_flags_horizontal = 8
 text = "10"
 label_settings = SubResource("LabelSettings_2j68d")
 
-[node name="fatigue" type="Timer" parent="."]
+[node name="background" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_3w47c")
+volume_db = 9.53
 
 [connection signal="value_changed" from="HUD/energy" to="HUD/energy" method="_on_value_changed"]
 [connection signal="timeout" from="HUD/dialogue/typing" to="HUD/dialogue" method="_on_typing_timeout"]
+[connection signal="finished" from="background" to="." method="_on_background_finished"]

@@ -14,12 +14,8 @@ func _ready():
 	if !DEBUG: 
 		# restore water quality
 		$StaticBody3D/bay.get_surface_override_material(0).set_shader_parameter("normal_map_w", 2048)
-	#var instance = datacenterscene.instantiate()
-	#instance.position = Vector3(-60, 0, 0)
-	#instance.init(instance.serversizes.SMALL)
-	#add_child(instance)
 	# initiate (constructor) the player
-	$player.init(100, 4000)
+	$player.init(100, 1000)
 	# start a timer for when the virus hits (between 8 and 12 min)
 	$virus.start(randi_range(8*60, 12*60))
 	
@@ -27,11 +23,17 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	# gradually show build spots as game progresses
+	if $player.xp >= 1000:
+		$group2.show()
+	if $player.xp >= 2500:
+		$group3.show()
+	if $player.xp >= 4000:
+		$group4.show()
+	
 
 
-
-## called when the player interacts with an object
+## emitted by player when the player interacts with an object that needs to be handled by map (when building for example)
 ## [param interactable] object in question
 func _on_player_interact(interactable):
 	print("interaction detected: " + str(interactable))
@@ -47,7 +49,7 @@ func _on_player_interact(interactable):
 		add_child(datacenterinstance)
 		# delete the build spot
 		interactable.free()
-		# take energy
+		# take energy (scales with datacenter size, using price)
 		$player.changeenergy(-datacenter.prices[$player.datacenter_in_hand]/50)
 		# give player points for building server
 		$player.xp += datacenter.xp[$player.datacenter_in_hand]

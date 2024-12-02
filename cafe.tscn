@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://bbvfxgju5e8v3"]
+[gd_scene load_steps=26 format=3 uid="uid://bbvfxgju5e8v3"]
 
 [ext_resource type="Texture2D" uid="uid://clcy3wxj7b1sx" path="res://assets/icons/bytescafe.svg" id="1_2fhoy"]
 [ext_resource type="PackedScene" uid="uid://br85e10yy4w3t" path="res://assets/coffee.tscn" id="2_lp2tn"]
 [ext_resource type="FontFile" uid="uid://clnw6mqnwq1yi" path="res://assets/fonts/Montserrat-ExtraLight.ttf" id="2_v4y0r"]
 [ext_resource type="PackedScene" uid="uid://3gnnr28e5acw" path="res://assets/noodles.tscn" id="3_6u5s8"]
 [ext_resource type="PackedScene" uid="uid://bx53amw3x4rww" path="res://assets/salad.tscn" id="4_qj8mk"]
+[ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="4_sokcv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1qum"]
 albedo_color = Color(0.277528, 0.277528, 0.277528, 1)
@@ -146,11 +147,32 @@ shape = SubResource("ConvexPolygonShape3D_yvayd")
 [node name="coffee" parent="." instance=ExtResource("2_lp2tn")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 1.226, -2)
 
+[node name="Label3D" type="Label3D" parent="coffee"]
+transform = Transform3D(0.385, 0, 0, 0, -1.68289e-08, 0.385, 0, -0.385, -1.68289e-08, 0, -0.106596, 0.159459)
+text = "price: $50
+energy: 10"
+font = ExtResource("4_sokcv")
+outline_size = 2
+
 [node name="noodles" parent="." instance=ExtResource("3_6u5s8")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1.06838, 1.26489, -2)
 
+[node name="Label3D" type="Label3D" parent="noodles"]
+transform = Transform3D(0.29, 0, 0, 0, -1.26763e-08, 0.29, 0, -0.29, -1.26763e-08, 0, -0.126233, 0.191274)
+text = "price: $150
+energy: 40"
+font = ExtResource("4_sokcv")
+outline_size = 2
+
 [node name="salad" parent="." instance=ExtResource("4_qj8mk")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.16653, -2)
+
+[node name="Label3D" type="Label3D" parent="salad"]
+transform = Transform3D(0.37, 0, 0, 0, -1.61732e-08, 0.37, 0, -0.37, -1.61732e-08, 0, -0.0999641, 0.232337)
+text = "price: $100
+energy: 30"
+font = ExtResource("4_sokcv")
+outline_size = 2
 
 [node name="lights" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.42536, 1)

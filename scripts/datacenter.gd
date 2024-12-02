@@ -20,9 +20,9 @@ const prices : Dictionary = {
 }
 ## earn rates / second online
 const rates : Dictionary = {
-	serversizes.SMALL: 1,
-	serversizes.MEDIUM: 2,
-	serversizes.LARGE: 4
+	serversizes.SMALL: 10,
+	serversizes.MEDIUM: 20,
+	serversizes.LARGE: 100
 }
 ## xp gain when building
 const xp : Dictionary = {
@@ -55,18 +55,22 @@ var playernode : player
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# check if the datacenter is on a map with the player
 	if "Map" in get_parent().name:
+		# if yes, set onthemap and playernode is used to reference player
 		onthemap = true
 		playernode = get_parent().get_node("player")
+	# for debugging
 	print("datacenter built at: " + str(transform))
 	# set status
 	status(false)
-	usage = 50
 
-# constructor (call when creating object)
+## constructor (call when creating object)
+## [param size] type/size of server
 func init(size : serversizes):
-	## server type
+	# server type
 	serversize = size
+	# price and rates accordingly
 	price = prices[size]
 	rate = rates[size]
 	# add the corresponding server racks
@@ -78,22 +82,21 @@ func init(size : serversizes):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# print("update status: " + str(outdated))
-	if get_node("serverpanel") != null:
-		if get_node("serverpanel").loggedout:
-			get_node("serverpanel").free()
-			get_parent().get_node("player").resume()
-	#if "Map" in get_parent().name:
-		#get_parent().get_node("player").changebalance()
-	# 50% chance of increasing usage by delta
+	
+	# 50% chance of increasing usage when online
 	if randi() % 2 and online and usage < capacity:
+		# usage increase scales with server size (referencing price here)
 		usage += delta / (price / 100)
 	# if the disk is filled, the server becomes offline
 	if usage >= capacity:
 		status(false)
 
+## set server status
+## [param newstat] online or not
 func status(newstat : bool):
+	# set online accordingly
 	online = newstat
+	# and the colours as well as whether the payment cycle is running
 	if online:
 		$sizelabel.modulate = ONLINE_COLOUR
 		$payment.start()
@@ -101,16 +104,40 @@ func status(newstat : bool):
 		$sizelabel.modulate = OFFLINE_COLOUR
 		$payment.stop()
 
+# show the server panel
 func showpanel():
+	# face the player away (so they don't click on it immediately after exiting, stuck forever in the haunting glow of the server panel)
 	playernode.rotation.y = -$panel.rotation.y
-	playernode.pause
+	# pause player movement
+	playernode.pause()
+	# instantiate panel and add it to scene tree
 	var serverpanelinstance = load("res://serverpanel.tscn").instantiate()
 	add_child(serverpanelinstance)
+	# wait for panel logout button to be pressed
+	await serverpanelinstance.get_node("logout").pressed
+	# if that happens, delete the panel
+	serverpanelinstance.queue_free()
+	# resume player movement
+	playernode.resume()
+	# delete the serverpanel if there is one to be deleted (apparently it cannot delete itself for some reason)
+	# panelcloser()
+	
+func panelcloser():
+	while get_node("serverpanel") != null:
+		# logged out means it is to be deleted
+		if get_node("serverpanel").loggedout:
+			# delete the panel
+			get_node("serverpanel").free()
+			# renenable movement
+			get_parent().get_node("player").resume()
 
+# finish updating server
 func update():
-	# from 1 min to 3 min
-	$update.start(round(randf() * 120) + 60 )
+	# reset update timer to a value between 2 and 5 min
+	$update.start(round(randf() * 180) + 120 )
+	# server online
 	status(true)
+	# and no longer outdated
 	outdated = false
 
 # populate datacenters with server racks based on size
@@ -155,14 +182,23 @@ func buildracks(size : serversizes):
 		# add it to the scene tree
 		add_child(rackinstance)
 
+# destroy the server
 func destroy():
+	# make sure the server exists on a map
 	if onthemap:
+		# credit 80% of the server's value to the player
 		playernode.transaction(round(price * 0.8))
+		# instantiate a buildspot
 		var buildspot = load("res://buildspot.tscn").instantiate()
+		# put buildspot in its place exactly
 		buildspot.transform = transform
+		# add it to map (datacenter instanced under map)
 		get_parent().add_child(buildspot)
+		# resume player movement
 		playernode.resume()
+		# hide the datacenter
 		hide()
+		# delete it when ready
 		queue_free()
 
 # makes server out of date (called when update timer up or by virus)
@@ -181,4 +217,5 @@ func _on_payment_cycle():
 		playernode.transaction(rates[serversize])
 		# give the player an experience point for uptime
 		playernode.xp += 1
+		# restart timer
 		$payment.start()

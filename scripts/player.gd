@@ -37,7 +37,7 @@ var inventory = {
 ## will be true if player is actively in a 2D UI
 var inpanel : bool = false
 ## player receives bonus every this many xp points
-const XPBONUSPOINT = 100
+const XPBONUSPOINT = 500
 ## player receives this bonus amount
 const BONUSAMOUNT = 500
 ## last xp value the player received a bonus at
@@ -69,11 +69,14 @@ func init(energy : int, balance : int):
 	$Camera3D.rotation_degrees.x = -85
 	# pause movement
 	pause()
+	# play intro
+	$background.play()
 
+# constantly run
 func _physics_process(delta: float) -> void:
 	# toggle for raycast debugging
 	# print($"Camera3D/3D cursor".get_collider())
-	# check if player wants to pause
+	# check if player wants to pause (should only happen if within panel)
 	if !inpanel:
 		pauser()
 	# only move if player is supposed to be moving
@@ -81,6 +84,7 @@ func _physics_process(delta: float) -> void:
 		keymovement(delta)
 		# for player interactions
 		interactor()
+	# if player burns out and isn't already dead
 	if energy <= 0 and !dead:
 		# instance and add game over screen to scene
 		add_child( load("res://gameover.tscn").instantiate() )
@@ -88,11 +92,16 @@ func _physics_process(delta: float) -> void:
 		pause()
 		# prevent further instantiations
 		dead = true
+	# eat when eat key pressed
 	if Input.is_action_just_released("eat"):
 		eat()
+	# if there is no active message in the xp counter
 	if !xpmessage:
+		# display normally
 		$HUD/xp.text = "XP: " + str(xp)
+	# if player hits the amount of xp to get a bonus, and they haven't already gotten bonus for that level
 	if xp % XPBONUSPOINT == 0 and xp != lastpayoutxp:
+		# give xp bonus
 		xppayout()
 
 # runs whenever input is received (mouse, keyboard, controller)
@@ -123,59 +132,100 @@ func interactor():
 				interact.emit(interactable)
 		# for the shop items
 		elif "product" in interactable.name:
+			# make sure hand is empty before purchasing
 			if datacenter_in_hand == null:
+				# run shopchecker for every server type
 				if "S" in interactable.name:
 					shopchecker(interactable, datacenter.serversizes.SMALL)
 				elif "M" in interactable.name:
 					shopchecker(interactable, datacenter.serversizes.MEDIUM)
 				elif "L" in interactable.name:
 					shopchecker(interactable, datacenter.serversizes.LARGE)
+			# if not, the player already has a server in hand
 			else:
 				tooltipnode.text = "already holding a server"
+		# if the player faces a selling bin in the shop
 		elif "sellbin" in interactable.name:
+			# prompt
 			tooltipnode.text = "click to sell"
+			# if player clicks
 			if Input.is_action_just_released("click") and moving and !paused:
+				# if player has a datacenter in hand
 				if datacenter_in_hand != null:
+					# credit player with the price of that datacenter
 					transaction(datacenter.prices[datacenter_in_hand])
+					# remove from hand
 					datacenter_in_hand = null
+					# tell inventory to update
 					$HUD/inventory.update()
+		# if player faces a panel placeholder
 		elif "panel" in interactable.name:
+			# prompt
 			tooltipnode.text = "click to log in"
+			# if player clicks
 			if Input.is_action_just_released("click") and moving and !paused:
+				# show the panel in the datacenter (parent of panel placeholder)
 				interactable.get_parent().showpanel()
+				# pause player movement
 				pause()
+		# if the player faces a food item in cafe bytes
 		elif interactable is food:
 			cafechecker(interactable)
 		else:
+			# if all of the above don't match, show generic message
 			tooltipnode.text = "click to interact"
 	# if there is no interactable object, leave the tooltip hidden
 	else:
 		tooltipnode.hide()
-	
+
+## run in interactor for every server in the shop
+#                object in question     the size of that dataenter object
 func shopchecker(interactable : Node3D, size : datacenter.serversizes):
+	# check if player has enough balance
 	if balance >= datacenter.prices[size]:
+		# if yes, prompt to buy
 		tooltipnode.text = "click to buy"
+		# if player clicks
 		if Input.is_action_just_released("click") and moving and !paused:
+			# give the player the datacenter
 			datacenter_in_hand = size
+			# deduct the price of that datacenter from balance
 			transaction(-datacenter.prices[size])
+			# tell inventory about the change
 			$HUD/inventory.update()
-	elif balance < float(datacenter.prices[size]):
+	# if player does not have enough balance to purchase datacenter
+	elif balance < datacenter.prices[size]:
+		# let player know
 		tooltipnode.text = "insufficient funds"
+	# if for whatever reason all of the above is not satisfied
 	else:
+		# hide the tooltip
 		tooltipnode.hide()
 
+## run for the food object player is interacting with
+## [param food] the food object
 func cafechecker(interactable : food):
+	# get the price of that food object
 	var foodprice = food.prices[interactable.foodtype]
+	# check if player has enough balance to buy it
 	if balance >= foodprice:
+		# if yes, prompt to buy
 		tooltipnode.text = "click to buy"
+		# if player clicks
 		if Input.is_action_just_released("click") and moving and !paused:
+			# add a food object of that type to the inventory
 			inventory[interactable.foodtype] += 1
+			# deduct price from balance
 			transaction(-foodprice)
+			# tell inventory about the change
 			$HUD/inventory.update()
+	# otherwise, if the player has not enough balance to buy it
 	elif balance < foodprice:
+		# let the player know
 		tooltipnode.text = "insufficient funds"
 #endregion
 
+# pay xp bonus
 func xppayout():
 	# congratulate player
 	xpmessage = true
@@ -250,18 +300,21 @@ func pauser():
 	if Input.is_action_just_released("resume") and paused:
 		resume()
 
+# consume food in inventory (the most food before player is full)
 func eat():
-	var toconsume := {
-		food.type.COFFEE: 0,
-		food.type.SALAD: 0,
-		food.type.NOODLES: 0
-	}
+	# iterate through inventory
 	for x in inventory:
+		# calculate energy left to fill
 		var hunger : int = 100 - energy
+		# while the food has less energy than that to fill and the player has one of that food
 		while food.energies[x] <= hunger and inventory[x] > 0:
+			# remove it from the inventory
 			inventory[x] -= 1
+			# tell inventory about it
 			$HUD/inventory.update()
+			# credit the energy from that food
 			changeenergy(food.energies[x])
+			# recalculate energy left to fill
 			hunger = 100 - energy
 
 # for wasd + space
@@ -285,16 +338,19 @@ func keymovement(delta):
 	# Handle jump
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+	# Get the input direction as a vector of directional inputs
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	# transpose that vector to that of the 3D space the player is facing
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	# if direction is more than zero, set velocity to it (weighted with speed)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+	# if direction is zero (no input), decelerate (move velocity to zero)
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+	# godot physics engine
 	move_and_slide()
 
 ## camera movement based on mouse
@@ -310,3 +366,9 @@ func cammovement(event : InputEvent):
 	camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -90, 90)
 	# check if the player is facing an interactible object
 #endregion
+
+# emitted when background sountrack player done playing
+func _on_background_finished():
+	# load and play background soundtrack
+	$background.stream = load("res://assets/audio/silirpg-ambient.mp3")
+	$background.play()

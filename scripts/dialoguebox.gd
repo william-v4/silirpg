@@ -6,16 +6,16 @@ const TYPESEC : float = 1/64 * 80 / TYPESPEED
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
-	# empty the dialogue box
-	# text = "[type]cuwzqkmktovhpigpwajmylsgzxyxbuvrjqfwnozwvckscyznxljsuyprwzmdvkhobpfgqetaujwzixmyhldrsfvkntbgpzaqjqchswltgrcboeifmdkuyzopvhsqjknfcxiwlzgmrbtkqvadyshjxasijdhkhasijeoghojawefoijaweoifoiawejtoijaweoigjoiawejoitjaw3oijoiw4a0r0gaw09erg0aawreg8awertawet82338rwhff"
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	## time it takes to type out the contents of dialogue box (# of characters * sec/char)
+	# time it takes to type out the contents of dialogue box (# of characters * sec/char)
 	var typetime = text.length() * TYPESEC
 
 ## update dialogue box text
+## [param message] message to display in dialogue box
 func update(message : String):
 	# show the dialogue box
 	show()

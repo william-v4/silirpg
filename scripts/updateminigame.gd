@@ -12,8 +12,8 @@ var hashes := []
 func _ready():
 	# hide the result label
 	$result.hide()
-	# generate between 10 and 20 hashes
-	for i in range(randi_range(10, 20)):
+	# generate between 10 and 15 hashes
+	for i in range(randi_range(10, 15)):
 		# reset rng every time
 		randomize()
 		# generate float, hash the float, and then append to array

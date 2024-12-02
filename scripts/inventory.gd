@@ -1,5 +1,6 @@
 extends Control
 
+# nodes of the food slots
 const foodnodenames := {
 	food.type.COFFEE: "coffee",
 	food.type.SALAD: "salad",
@@ -17,7 +18,7 @@ func _ready():
 func _process(delta):
 	pass
 
-## called by player to update inventory gui
+# called by player to update inventory gui
 func update():
 	print("inventory updated")
 	# see if the player is holding a datacenter
@@ -31,14 +32,19 @@ func update():
 		$datacenter.hide()
 	# iterate through player food inventory
 	for x in $"../..".inventory:
+		#         node name         inventory amount
 		fooditems(foodnodenames[x], $"../..".inventory[x])
 	
 	
 func fooditems(name : String, amount : int):
 	print("updating " + str(name) + " to " + str(amount))
+	# for the corresponding
 	var entrynode = get_node(name)
+	# check amount
 	if amount == 0:
+		# hide inventory slot if there are none of that item
 		entrynode.hide()
+	# otherwise, show the inventory slot and update its counter to match the amount of that item
 	else:
 		entrynode.show()
 		entrynode.get_node("count").text = str(amount)

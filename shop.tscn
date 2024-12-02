@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://b0h585th5qarv"]
+[gd_scene load_steps=28 format=3 uid="uid://b0h585th5qarv"]
 
 [ext_resource type="Texture2D" uid="uid://cies3y8viif1b" path="res://assets/icons/serverforge.svg" id="1_hljau"]
 [ext_resource type="PackedScene" uid="uid://ce20i0jeryxo1" path="res://rack_l.tscn" id="2_uo5to"]
+[ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="3_efgvw"]
 [ext_resource type="PackedScene" uid="uid://btqwygspmnxc8" path="res://rack_m.tscn" id="3_yuga2"]
 [ext_resource type="PackedScene" uid="uid://cr3ovxdd00ml5" path="res://rack_s.tscn" id="4_eolfs"]
 [ext_resource type="FontFile" uid="uid://clnw6mqnwq1yi" path="res://assets/fonts/Montserrat-ExtraLight.ttf" id="5_7qnhf"]
@@ -138,13 +139,31 @@ omni_range = 22.523
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.653599, 3)
 collision_layer = 3
 
+[node name="Label3D" type="Label3D" parent="L product"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.70033, 0)
+text = "price: $3000
+build energy: 60"
+font = ExtResource("3_efgvw")
+
 [node name="M product" parent="." instance=ExtResource("3_yuga2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 3)
 collision_layer = 3
 
+[node name="Label3D" type="Label3D" parent="M product"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47454, 0)
+text = "price: $1000
+build energy: 20"
+font = ExtResource("3_efgvw")
+
 [node name="S product" parent="." instance=ExtResource("4_eolfs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 3)
 collision_layer = 3
+
+[node name="Label3D" type="Label3D" parent="S product"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47454, 0)
+text = "price: $500
+build energy: 10"
+font = ExtResource("3_efgvw")
 
 [node name="sellbin" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1)
