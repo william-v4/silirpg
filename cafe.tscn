@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://bbvfxgju5e8v3"]
+[gd_scene load_steps=25 format=3 uid="uid://bbvfxgju5e8v3"]
 
 [ext_resource type="Texture2D" uid="uid://clcy3wxj7b1sx" path="res://assets/icons/bytescafe.svg" id="1_2fhoy"]
 [ext_resource type="PackedScene" uid="uid://br85e10yy4w3t" path="res://assets/coffee.tscn" id="2_lp2tn"]
+[ext_resource type="FontFile" uid="uid://clnw6mqnwq1yi" path="res://assets/fonts/Montserrat-ExtraLight.ttf" id="2_v4y0r"]
 [ext_resource type="PackedScene" uid="uid://3gnnr28e5acw" path="res://assets/noodles.tscn" id="3_6u5s8"]
 [ext_resource type="PackedScene" uid="uid://bx53amw3x4rww" path="res://assets/salad.tscn" id="4_qj8mk"]
 
@@ -97,6 +98,14 @@ texture = ExtResource("1_2fhoy")
 [node name="counter" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.501, -2)
 mesh = SubResource("BoxMesh_cv6ja")
+
+[node name="brandname" type="Label3D" parent="StaticBody3D/counter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.501)
+modulate = Color(0.510467, 0.174042, 0.164691, 1)
+outline_modulate = Color(0, 0, 0, 0)
+text = "café bytes"
+font = ExtResource("2_v4y0r")
+font_size = 128
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.501, -2)

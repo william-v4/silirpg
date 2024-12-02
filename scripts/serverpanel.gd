@@ -64,5 +64,10 @@ func _on_clean_pressed():
 
 # run when user presses upgrade
 func _on_upgrade_pressed():
-	playernode.transaction(-100)
+	if playernode.balance >= 100:
+		playernode.transaction(-100)
 	parent.capacity += 100
+
+
+func _on_destroy_pressed():
+	parent.destroy()

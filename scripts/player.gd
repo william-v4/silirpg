@@ -41,7 +41,7 @@ func _ready() -> void:
 	tooltipnode = $HUD/tooltip
 	# hide unused UI elements
 	$HUD/dialogue.hide()
-	$HUD/systemmessages.hide()
+	$HUD/systemmessages.text = ""
 	tooltipnode.hide()
 	# capture player mouse for camera movement
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

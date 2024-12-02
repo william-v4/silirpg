@@ -7,6 +7,10 @@ var datacenterscene = preload("res://datacenter.tscn")
 
 # Called when the node enters the scene tree for the first time
 func _ready():
+	# start daynight cycle (at sunrise)
+	$AnimationPlayer.current_animation = "daynight"
+	# $AnimationPlayer.seek(20)
+	$AnimationPlayer.play()
 	if !DEBUG: 
 		# restore water quality
 		$StaticBody3D/bay.get_surface_override_material(0).set_shader_parameter("normal_map_w", 2048)
@@ -15,7 +19,10 @@ func _ready():
 	#instance.init(instance.serversizes.SMALL)
 	#add_child(instance)
 	# initiate (constructor) the player
-	$player.init(10, 1000)
+	$player.init(100, 6900)
+	# start a timer for when the virus hits (between 8 and 12 min)
+	$virus.start(randi_range(8*60, 12*60))
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,3 +53,22 @@ func _on_player_interact(interactable):
 		$player.datacenter_in_hand = null
 		# and tell player inventory UI about this change
 		$player/HUD/inventory.update()
+
+# called by virus timer when it's up
+func _on_virus_timeout():
+	# let player know
+	$player/HUD/systemmessages.text = "a virus hit your servers"
+	# for every node
+	for x in get_children():
+		# if it's a datacenter
+		if x is datacenter:
+			# prematurely trigger its update timer
+			x.get_node("update").stop()
+			x.get_node("update").start(1)
+			# fill up its disk space
+			x.usage = x.capacity
+	# wait a few seconds before clearing the message
+	await get_tree().create_timer(10).timeout
+	$player/HUD/systemmessages.text = ""
+	# start new timer
+	$virus.start(randi_range(8*60, 12*60))

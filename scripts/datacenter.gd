@@ -80,9 +80,11 @@ func _process(delta):
 	#if "Map" in get_parent().name:
 		#get_parent().get_node("player").changebalance()
 	# 50% chance of increasing usage by delta
-	if randi() % 2 and online:
-		# print(usage)
+	if randi() % 2 and online and usage < capacity:
 		usage += delta / (price / 100)
+	# if the disk is filled, the server becomes offline
+	if usage >= capacity:
+		status(false)
 
 func status(newstat : bool):
 	online = newstat
@@ -153,10 +155,11 @@ func destroy():
 		var buildspot = load("res://buildspot.tscn").instantiate()
 		buildspot.transform = transform
 		get_parent().add_child(buildspot)
+		playernode.resume()
 		hide()
 		queue_free()
 
-# when update timer runs out
+# makes server out of date (called when update timer up or by virus)
 func _on_update_expired():
 	# server goes offline
 	status(false)
