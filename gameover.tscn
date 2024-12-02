@@ -49,6 +49,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "you burned out"
 label_settings = SubResource("LabelSettings_wfqaw")
+horizontal_alignment = 1
 
 [node name="subtitle" type="Label" parent="."]
 layout_mode = 1

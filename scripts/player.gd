@@ -44,6 +44,8 @@ const BONUSAMOUNT = 500
 var lastpayoutxp : int = 0
 ## variable for locking the xp indicator while message is shown
 var xpmessage := false
+## true when player dead
+var dead := false
 
 # run as soon as node enters scene
 func _ready() -> void:
@@ -63,6 +65,8 @@ func init(energy : int, balance : int):
 	# prompt for name
 	# instance and add to scene tree the name input scene
 	add_child( load("res://namebox.tscn").instantiate() )
+	# face camera downwards for scenery
+	$Camera3D.rotation_degrees.x = -85
 	# pause movement
 	pause()
 
@@ -77,11 +81,13 @@ func _physics_process(delta: float) -> void:
 		keymovement(delta)
 		# for player interactions
 		interactor()
-	if energy <= 0:
+	if energy <= 0 and !dead:
 		# instance and add game over screen to scene
 		add_child( load("res://gameover.tscn").instantiate() )
 		# disable movement
 		pause()
+		# prevent further instantiations
+		dead = true
 	if Input.is_action_just_released("eat"):
 		eat()
 	if !xpmessage:
@@ -263,6 +269,19 @@ func keymovement(delta):
 	# add gravity to velocity (reminder gravity accelerates with time, so multiply by delta)
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		# player dies if fall
+		if position.y < -20 and !dead:
+			# instantiate game over screen
+			var gameoverscreen = load("res://gameover.tscn").instantiate()
+			# add to scene tree
+			add_child(gameoverscreen)
+			# disable movement
+			pause()
+			# change death messages
+			gameoverscreen.get_node("title").text = "go seek help"
+			gameoverscreen.get_node("subtitle").hide()
+			# prevent further instantiations
+			dead = true
 	# Handle jump
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
