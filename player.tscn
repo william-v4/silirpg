@@ -90,10 +90,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -152.0
-offset_top = -152.0
-offset_right = -31.0
-offset_bottom = -31.0
+offset_left = -136.0
+offset_top = -136.0
+offset_right = -15.0
+offset_bottom = -15.0
 grow_horizontal = 0
 grow_vertical = 0
 value = 1.0
@@ -156,11 +156,20 @@ one_shot = true
 
 [node name="systemmessages" type="Label" parent="HUD"]
 layout_mode = 1
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 316.0
-offset_bottom = 39.0
+offset_left = 18.0
+offset_top = 48.0
+offset_right = 318.0
+offset_bottom = 71.0
 text = "[system] all your servers have crashed"
+label_settings = SubResource("LabelSettings_tvywy")
+
+[node name="xp" type="Label" parent="HUD"]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 146.0
+offset_bottom = 39.0
+text = "XP: XX.XXX"
 label_settings = SubResource("LabelSettings_tvywy")
 
 [node name="tooltip" type="Label" parent="HUD"]
@@ -322,3 +331,4 @@ label_settings = SubResource("LabelSettings_2j68d")
 [node name="fatigue" type="Timer" parent="."]
 
 [connection signal="value_changed" from="HUD/energy" to="HUD/energy" method="_on_value_changed"]
+[connection signal="timeout" from="HUD/dialogue/typing" to="HUD/dialogue" method="_on_typing_timeout"]

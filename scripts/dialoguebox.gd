@@ -17,8 +17,15 @@ func _process(delta):
 
 ## update dialogue box text
 func update(message : String):
-	## update text (and add typewriter effect flag)
+	# show the dialogue box
+	show()
+	# update text (and add typewriter effect flag)
 	text = "[type]" + message
-	## set and start a timer for the time it takes to type out the contents of dialogue box (# of characters * sec/char)
-	$typing.start(text.length() * TYPESEC)
+	# set and start a timer for the time it takes to type out the contents of dialogue box (# of characters * sec/char) with a few seconds added
+	$typing.start(text.length() * TYPESEC + 10)
 	
+
+# when the timer finishes
+func _on_typing_timeout():
+	# hide the dialogue box
+	hide()

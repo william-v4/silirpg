@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dq1mtipnsqe1y"]
+[gd_scene load_steps=8 format=3 uid="uid://dq1mtipnsqe1y"]
 
+[ext_resource type="Script" path="res://scripts/buildspot.gd" id="1_61gt5"]
 [ext_resource type="FontFile" uid="uid://bl1l2n3qtdr5c" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="1_wnabg"]
 
 [sub_resource type="Gradient" id="Gradient_6f8ia"]
@@ -24,6 +25,7 @@ size = Vector3(6, 5, 6)
 
 [node name="buildspot" type="StaticBody3D"]
 collision_layer = 3
+script = ExtResource("1_61gt5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

@@ -19,7 +19,7 @@ func _ready():
 	#instance.init(instance.serversizes.SMALL)
 	#add_child(instance)
 	# initiate (constructor) the player
-	$player.init(100, 6900)
+	$player.init(100, 4000)
 	# start a timer for when the virus hits (between 8 and 12 min)
 	$virus.start(randi_range(8*60, 12*60))
 	
@@ -36,7 +36,7 @@ func _process(delta):
 func _on_player_interact(interactable):
 	print("interaction detected: " + str(interactable))
 	# if the object in question is a dacenter build slot and the player has one just purchased, 
-	if ("buildspot" in interactable.name) and $player.datacenter_in_hand != null:
+	if (interactable is buildspot) and $player.datacenter_in_hand != null:
 		# instance a datacenter
 		var datacenterinstance = datacenterscene.instantiate()
 		# initialize it (with the size of the datacenter the player just purchased)
@@ -49,6 +49,8 @@ func _on_player_interact(interactable):
 		interactable.free()
 		# take energy
 		$player.changeenergy(-datacenter.prices[$player.datacenter_in_hand]/50)
+		# give player points for building server
+		$player.xp += datacenter.xp[$player.datacenter_in_hand]
 		# the player now no longer has a datacenter in hand
 		$player.datacenter_in_hand = null
 		# and tell player inventory UI about this change

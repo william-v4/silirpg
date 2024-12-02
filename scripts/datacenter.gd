@@ -24,6 +24,12 @@ const rates : Dictionary = {
 	serversizes.MEDIUM: 2,
 	serversizes.LARGE: 4
 }
+## xp gain when building
+const xp : Dictionary = {
+	serversizes.SMALL: 10,
+	serversizes.MEDIUM: 20,
+	serversizes.LARGE: 50
+}
 ## color of label when server online
 @export var ONLINE_COLOUR = Color(0, 0.75, 0.5) # green
 ## color of label when server offline
@@ -167,8 +173,12 @@ func _on_update_expired():
 	outdated = true
 	print("server out of date")
 
-# run when the payment timer runs out
+# run when the payment timer runs out (every sec)
 func _on_payment_cycle():
+	# if the datacenter is on a map with the player
 	if onthemap:
+		# credit the player with the earn rate of the server
 		playernode.transaction(rates[serversize])
+		# give the player an experience point for uptime
+		playernode.xp += 1
 		$payment.start()

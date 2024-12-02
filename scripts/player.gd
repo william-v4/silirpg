@@ -5,8 +5,10 @@ class_name player
 var balance : int = 0
 ## energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 var energy : int = 100
-## servers built in total (1/server) + total uptime (0.01/sec)
-var xp : float = 0
+## experience gained building and running servers
+var xp : int = 0
+## player name
+var playername : String
 
 # physics weights
 @export var SPEED = 8
@@ -28,12 +30,20 @@ var inventory = {
 	food.type.SALAD: 0,
 	food.type.NOODLES: 0
 }
-# tooltip node so we don't have to type path every time
+## tooltip node so we don't have to type path every time
 @export var tooltipnode : Label
-# energy needed to build datacenter
+## energy needed to build datacenter
 @export var BUILD_ENERGY := 20
 ## will be true if player is actively in a 2D UI
 var inpanel : bool = false
+## player receives bonus every this many xp points
+const XPBONUSPOINT = 100
+## player receives this bonus amount
+const BONUSAMOUNT = 500
+## last xp value the player received a bonus at
+var lastpayoutxp : int = 0
+## variable for locking the xp indicator while message is shown
+var xpmessage := false
 
 # run as soon as node enters scene
 func _ready() -> void:
@@ -43,8 +53,6 @@ func _ready() -> void:
 	$HUD/dialogue.hide()
 	$HUD/systemmessages.text = ""
 	tooltipnode.hide()
-	# capture player mouse for camera movement
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 ## constructor
 ## [param energy] initial energy
@@ -52,6 +60,11 @@ func _ready() -> void:
 func init(energy : int, balance : int):
 	updateenergy(energy)
 	updatebalance(balance)
+	# prompt for name
+	# instance and add to scene tree the name input scene
+	add_child( load("res://namebox.tscn").instantiate() )
+	# pause movement
+	pause()
 
 func _physics_process(delta: float) -> void:
 	# toggle for raycast debugging
@@ -71,6 +84,10 @@ func _physics_process(delta: float) -> void:
 		pause()
 	if Input.is_action_just_released("eat"):
 		eat()
+	if !xpmessage:
+		$HUD/xp.text = "XP: " + str(xp)
+	if xp % XPBONUSPOINT == 0 and xp != lastpayoutxp:
+		xppayout()
 
 # runs whenever input is received (mouse, keyboard, controller)
 func _input(event: InputEvent) -> void:
@@ -79,6 +96,8 @@ func _input(event: InputEvent) -> void:
 		# camera movement
 		cammovement(event)
 
+
+#region interactions
 # check if player is facing an object to interact with
 func interactor():
 	# get the object the player is facing
@@ -88,7 +107,7 @@ func interactor():
 		# show the tooltip
 		tooltipnode.show()
 		# if that object is a slot to build a datacenter (named "buildspot")
-		if "buildspot" in interactable.name:
+		if interactable is buildspot:
 			# change the UI tooltip accordingly
 			tooltipnode.text = "click to build"
 		# otherwise, use the default
@@ -96,8 +115,6 @@ func interactor():
 			if Input.is_action_just_released("click") and moving and !paused:
 				# tell the map that the player decides to interact with this object
 				interact.emit(interactable)
-				# add build to total
-				xp += 1
 		# for the shop items
 		elif "product" in interactable.name:
 			if datacenter_in_hand == null:
@@ -151,6 +168,20 @@ func cafechecker(interactable : food):
 			$HUD/inventory.update()
 	elif balance < foodprice:
 		tooltipnode.text = "insufficient funds"
+#endregion
+
+func xppayout():
+	# congratulate player
+	xpmessage = true
+	$HUD/xp.text = "congrats on reaching " + str(xp) + ". you get a $" + str(BONUSAMOUNT) + " bonus"
+	# reset last payout
+	lastpayoutxp = xp
+	# credit the player the bonus
+	transaction(BONUSAMOUNT)
+	# wait a few seconds before clearing the message
+	await get_tree().create_timer(10).timeout
+	# clear the message
+	xpmessage = false
 
 #region setters
 ## pause the game

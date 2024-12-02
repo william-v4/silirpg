@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3 uid="uid://jq00nq8pkvps"]
+
+[ext_resource type="Script" path="res://scripts/namebox.gd" id="1_6gaqn"]
+[ext_resource type="FontFile" uid="uid://dutl3sf14uibh" path="res://assets/fonts/Montserrat-Thin.ttf" id="1_psdvc"]
+[ext_resource type="FontFile" uid="uid://bl1l2n3qtdr5c" path="res://assets/fonts/Montserrat-SemiBold.ttf" id="2_iawxr"]
+[ext_resource type="Texture2D" uid="uid://dcptirlnfgeii" path="res://assets/icons/enter.png" id="3_8f8h7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kg6dr"]
+font = ExtResource("1_psdvc")
+font_size = 72
+
+[node name="namebox" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6gaqn")
+
+[node name="title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -392.0
+offset_top = -148.0
+offset_right = 393.0
+offset_bottom = -69.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "welcome to silicon valley, "
+label_settings = SubResource("LabelSettings_kg6dr")
+
+[node name="input" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = -4.0
+offset_right = 320.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_iawxr")
+theme_override_font_sizes/font_size = 64
+placeholder_text = "what's your name?"
+
+[node name="submit" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -248.0
+offset_top = -20.0
+offset_right = -112.0
+offset_bottom = 116.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+theme_override_colors/icon_hover_color = Color(0.00784314, 0.686275, 0.698039, 1)
+icon = ExtResource("3_8f8h7")
+flat = true
+
+[connection signal="pressed" from="submit" to="." method="_on_submit_pressed"]
