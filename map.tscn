@@ -1,8 +1,9 @@
-[gd_scene load_steps=33 format=4 uid="uid://jdw2d8nt7v7x"]
+[gd_scene load_steps=29 format=4 uid="uid://jdw2d8nt7v7x"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_6usqn"]
 [ext_resource type="Material" uid="uid://c32odyi2s5kww" path="res://assets/materials/water.tres" id="1_g07ml"]
 [ext_resource type="PackedScene" uid="uid://dduvx6o0kigcy" path="res://player.tscn" id="2_paixg"]
+[ext_resource type="PackedScene" uid="uid://dq1mtipnsqe1y" path="res://buildspot.tscn" id="3_hni6i"]
 [ext_resource type="PackedScene" uid="uid://ckno10iy5hxd8" path="res://jensen.tscn" id="4_01t23"]
 [ext_resource type="PackedScene" uid="uid://b0h585th5qarv" path="res://shop.tscn" id="5_uhgqt"]
 
@@ -41,26 +42,6 @@ albedo_texture = SubResource("NoiseTexture2D_hsii2")
 [sub_resource type="PlaneMesh" id="PlaneMesh_k0f2b"]
 material = SubResource("StandardMaterial3D_lrjwu")
 size = Vector2(1000, 1000)
-
-[sub_resource type="Gradient" id="Gradient_6f8ia"]
-colors = PackedColorArray(0.156863, 0.509804, 0.827451, 1, 0.776471, 0.45098, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ddlkl"]
-gradient = SubResource("Gradient_6f8ia")
-fill_from = Vector2(0.147368, 0.115789)
-fill_to = Vector2(0.694737, 0.715789)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pybom"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.784314)
-albedo_texture = SubResource("GradientTexture2D_ddlkl")
-
-[sub_resource type="BoxMesh" id="BoxMesh_dqp0s"]
-material = SubResource("StandardMaterial3D_pybom")
-size = Vector3(6, 1, 6)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_tsgni"]
-size = Vector3(6, 4, 6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_upnxb"]
 
@@ -202,18 +183,8 @@ skeleton = NodePath("../StaticBody3D")
 
 [node name="interactionlayer" type="Node3D" parent="."]
 
-[node name="buildspot" type="StaticBody3D" parent="interactionlayer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.8949, 0, 22.5355)
-collision_layer = 3
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="interactionlayer/buildspot"]
-layers = 2
-mesh = SubResource("BoxMesh_dqp0s")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="interactionlayer/buildspot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-shape = SubResource("BoxShape3D_tsgni")
+[node name="buildspot" parent="interactionlayer" instance=ExtResource("3_hni6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8949, 0, 36.5355)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(0.788408, 0, -0.615152, 0, 1, 0, 0.615152, 0, 0.788408, 0.851, -0.001, -3.261)

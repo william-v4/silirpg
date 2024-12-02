@@ -40,6 +40,8 @@ func _on_player_interact(interactable):
 		add_child(datacenterinstance)
 		# delete the build spot
 		interactable.free()
+		# take energy
+		$player.changeenergy(-datacenter.prices[$player.datacenter_in_hand]/20)
 		# the player now no longer has a datacenter in hand
 		$player.datacenter_in_hand = null
 		# and tell player inventory UI about this change

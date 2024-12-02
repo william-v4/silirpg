@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://dq1mtipnsqe1y"]
+
+[sub_resource type="Gradient" id="Gradient_6f8ia"]
+colors = PackedColorArray(0.156863, 0.509804, 0.827451, 1, 0.776471, 0.45098, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ddlkl"]
+gradient = SubResource("Gradient_6f8ia")
+fill_from = Vector2(0.147368, 0.115789)
+fill_to = Vector2(0.694737, 0.715789)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pybom"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.784314)
+albedo_texture = SubResource("GradientTexture2D_ddlkl")
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqp0s"]
+material = SubResource("StandardMaterial3D_pybom")
+size = Vector3(6, 1, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tsgni"]
+size = Vector3(6, 4, 6)
+
+[node name="buildspot" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.8949, 0, 22.5355)
+collision_layer = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+layers = 2
+mesh = SubResource("BoxMesh_dqp0s")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_tsgni")

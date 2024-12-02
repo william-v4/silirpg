@@ -1,10 +1,56 @@
 extends Control
 
+## parent of this node (supposed to be a datacenter but not always, such as in debugging)
+var parent
+var loggedout = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	print("panel opened")
+	parent = get_parent()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if parent is datacenter:
+		$usage.max_value = parent.capacity
+		# $usage.value = parent.usage / parent.capacity * 100
+		$usage.value = parent.usage
+		$status.button_pressed = parent.online
+		# print("parent status " + str(parent.online))
+		# print("button status " + str($status.button_pressed))
+		var timetoupdate = parent.get_node("update").time_left
+		if timetoupdate == 0:
+			$updatetime.text = "now"
+			$updatetime/update.show()
+		else:
+			$updatetime/update.hide()
+			$updatetime.text = str(int(timetoupdate / 60)) + " : " + str(int(timetoupdate) % 60)
+
+
+func _on_status_button_up():
+	if parent is datacenter:
+		if $status.button_pressed and !parent.online and !parent.outdated:
+			parent.status(true)
+		if !$status.button_pressed and parent.online:
+			parent.status(false)
+		else:
+			pass
+			# $status.button_pressed = false
+
+
+func logout():
+	loggedout = true
+
+
+func _on_update_pressed():
+	# load update minigame
+	var updategame = load("res://updateminigame.tscn").instantiate()
+	add_child(updategame)
+
+
+func _on_clean_pressed():
+	var defraggame = load("res://defrag.tscn").instantiate()
+	add_child(defraggame)
+	if parent is datacenter:
+		parent.get_parent().get_node("player").changeenergy(-5)

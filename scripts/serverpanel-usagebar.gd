@@ -10,13 +10,15 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
-
-# update progress bar colour as value changes (will be run whenever progress bar detects change)
-func _on_value_changed(value):
 	# change colour of bar according to interpolation between LOW_COLOUR to HIGH_COLOUR based on percentage of value
 	tint_progress = LOW_COLOUR.lerp(HIGH_COLOUR, value / 100)
+	# update indicator text
+	$indicator.text = str(value)
 	# do the same for indicator text
 	$indicator.modulate = tint_progress
 	# and the same for the label
 	$Label.modulate = tint_progress
+
+# update progress bar colour as value changes (will be run whenever progress bar detects change)
+func _on_value_changed(value):
+	pass

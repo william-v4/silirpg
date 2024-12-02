@@ -1,9 +1,9 @@
-[gd_scene load_steps=25 format=3 uid="uid://dxapnf35m8hqi"]
+[gd_scene load_steps=31 format=3 uid="uid://dxapnf35m8hqi"]
 
 [ext_resource type="Script" path="res://scripts/datacenter.gd" id="1_dkrvl"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_ubchb"]
-[ext_resource type="PackedScene" uid="uid://cr3ovxdd00ml5" path="res://rack_s.tscn" id="3_4aggr"]
 [ext_resource type="PackedScene" uid="uid://ce20i0jeryxo1" path="res://rack_l.tscn" id="4_iuvsa"]
+[ext_resource type="Texture2D" uid="uid://diep0lhmsvfpf" path="res://assets/icons/panel.png" id="5_whp3o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ej83"]
 albedo_color = Color(0, 0, 0, 1)
@@ -74,6 +74,27 @@ material = SubResource("StandardMaterial3D_bej4s")
 
 [sub_resource type="BoxMesh" id="BoxMesh_6dmns"]
 size = Vector3(1, 1, 2)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_uwg3k"]
+data = PackedVector3Array(-0.5, 0.5, 1, 0.5, 0.5, 1, -0.5, -0.5, 1, 0.5, 0.5, 1, 0.5, -0.5, 1, -0.5, -0.5, 1, 0.5, 0.5, -1, -0.5, 0.5, -1, 0.5, -0.5, -1, -0.5, 0.5, -1, -0.5, -0.5, -1, 0.5, -0.5, -1, 0.5, 0.5, 1, 0.5, 0.5, -1, 0.5, -0.5, 1, 0.5, 0.5, -1, 0.5, -0.5, -1, 0.5, -0.5, 1, -0.5, 0.5, -1, -0.5, 0.5, 1, -0.5, -0.5, -1, -0.5, 0.5, 1, -0.5, -0.5, 1, -0.5, -0.5, -1, 0.5, 0.5, 1, -0.5, 0.5, 1, 0.5, 0.5, -1, -0.5, 0.5, 1, -0.5, 0.5, -1, 0.5, 0.5, -1, -0.5, -0.5, 1, 0.5, -0.5, 1, -0.5, -0.5, -1, 0.5, -0.5, 1, 0.5, -0.5, -1, -0.5, -0.5, -1)
+
+[sub_resource type="Gradient" id="Gradient_fh7ck"]
+colors = PackedColorArray(0.451211, 0.0533972, 0.60409, 1, 0, 0.307044, 0.694215, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oc03n"]
+gradient = SubResource("Gradient_fh7ck")
+fill_from = Vector2(0.326316, 0.494737)
+fill_to = Vector2(0.847368, 0.0105263)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nmno1"]
+albedo_texture = SubResource("GradientTexture2D_oc03n")
+
+[sub_resource type="BoxMesh" id="BoxMesh_umtah"]
+material = SubResource("StandardMaterial3D_nmno1")
+size = Vector3(2, 1, 0.1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_i11l3"]
+data = PackedVector3Array(-1, 0.5, 0.05, 1, 0.5, 0.05, -1, -0.5, 0.05, 1, 0.5, 0.05, 1, -0.5, 0.05, -1, -0.5, 0.05, 1, 0.5, -0.05, -1, 0.5, -0.05, 1, -0.5, -0.05, -1, 0.5, -0.05, -1, -0.5, -0.05, 1, -0.5, -0.05, 1, 0.5, 0.05, 1, 0.5, -0.05, 1, -0.5, 0.05, 1, 0.5, -0.05, 1, -0.5, -0.05, 1, -0.5, 0.05, -1, 0.5, -0.05, -1, 0.5, 0.05, -1, -0.5, -0.05, -1, 0.5, 0.05, -1, -0.5, 0.05, -1, -0.5, -0.05, 1, 0.5, 0.05, -1, 0.5, 0.05, 1, 0.5, -0.05, -1, 0.5, 0.05, -1, 0.5, -0.05, 1, 0.5, -0.05, -1, -0.5, 0.05, 1, -0.5, 0.05, -1, -0.5, -0.05, 1, -0.5, 0.05, 1, -0.5, -0.05, -1, -0.5, -0.05)
 
 [node name="datacenter" type="StaticBody3D"]
 script = ExtResource("1_dkrvl")
@@ -177,26 +198,41 @@ omni_range = 10.751
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49, 0.5, -1.99)
 mesh = SubResource("BoxMesh_6dmns")
 
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49, 0.5, -1.99)
+shape = SubResource("ConcavePolygonShape3D_uwg3k")
+
 [node name="sizelabel" type="Label3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 2, -3.01)
 text = "S"
 font = ExtResource("2_ubchb")
 font_size = 256
 
-[node name="rack S" parent="." instance=ExtResource("3_4aggr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 2)
-visible = false
-
-[node name="rack S2" parent="." instance=ExtResource("3_4aggr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
-visible = false
-
-[node name="rack S3" parent="." instance=ExtResource("3_4aggr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 2)
-visible = false
-
 [node name="payment" type="Timer" parent="."]
+one_shot = true
 
 [node name="rack l" parent="." instance=ExtResource("4_iuvsa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.653599, 2)
 visible = false
+
+[node name="panel" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.94, 2, -1.999)
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="panel"]
+mesh = SubResource("BoxMesh_umtah")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="panel"]
+shape = SubResource("ConcavePolygonShape3D_i11l3")
+
+[node name="Sprite3D" type="Sprite3D" parent="panel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.101)
+pixel_size = 0.0005
+texture = ExtResource("5_whp3o")
+
+[node name="update" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
+
+[connection signal="timeout" from="update" to="." method="_on_update_expired"]

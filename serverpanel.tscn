@@ -1,20 +1,44 @@
-[gd_scene load_steps=8 format=3 uid="uid://8j3y5wc22h0p"]
+[gd_scene load_steps=21 format=3 uid="uid://8j3y5wc22h0p"]
 
 [ext_resource type="Script" path="res://scripts/serverpanel.gd" id="1_l5db1"]
 [ext_resource type="Texture2D" uid="uid://bl4vd0b1dins2" path="res://assets/icons/circularbar.svg" id="1_q0ugg"]
 [ext_resource type="Script" path="res://scripts/serverpanel-usagebar.gd" id="2_cxihc"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="3_7iyia"]
+[ext_resource type="FontFile" uid="uid://bl40gboy7y7uk" path="res://assets/fonts/Montserrat-Bold.ttf" id="4_7fl54"]
+[ext_resource type="Texture2D" uid="uid://b543srcqf3hmg" path="res://assets/icons/clean.png" id="6_puk35"]
+[ext_resource type="Texture2D" uid="uid://dr62m3c5klano" path="res://assets/icons/upgrade.png" id="7_8e5dw"]
+[ext_resource type="FontFile" uid="uid://clnw6mqnwq1yi" path="res://assets/fonts/Montserrat-ExtraLight.ttf" id="8_t41df"]
+[ext_resource type="Texture2D" uid="uid://d0oy4hn6vliu8" path="res://assets/icons/update.png" id="9_6lfbc"]
+[ext_resource type="Texture2D" uid="uid://cixk2by7tve4n" path="res://assets/icons/destroy.png" id="10_1w31g"]
+[ext_resource type="Texture2D" uid="uid://bs4fpip3umu65" path="res://assets/icons/online.png" id="12_0fwvm"]
+[ext_resource type="Texture2D" uid="uid://blofajrkdfi43" path="res://assets/icons/offline.png" id="12_b7uug"]
+[ext_resource type="Texture2D" uid="uid://cj1qouy2ueyls" path="res://assets/icons/logout.png" id="13_4qwa4"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x5170"]
+size = Vector2(150, 150)
+orientation = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_hu2ae"]
+font = ExtResource("4_7fl54")
+font_size = 64
 
 [sub_resource type="LabelSettings" id="LabelSettings_e2y3s"]
 font = ExtResource("3_7iyia")
+font_size = 56
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rpiev"]
-albedo_color = Color(0.00351917, 0.00351917, 0.00351917, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_dbc1b"]
+font = ExtResource("4_7fl54")
+font_size = 128
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_x5170"]
-material = SubResource("StandardMaterial3D_rpiev")
-size = Vector2(100, 100)
-orientation = 2
+[sub_resource type="LabelSettings" id="LabelSettings_ovudg"]
+font = ExtResource("8_t41df")
+font_size = 100
+
+[sub_resource type="LabelSettings" id="LabelSettings_j1q2y"]
+font = ExtResource("3_7iyia")
+font_size = 24
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_usakk"]
 
 [node name="serverpanel" type="Control"]
 layout_mode = 3
@@ -25,19 +49,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l5db1")
 
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+modulate = Color(0.201527, 0.201527, 0.201527, 1)
+position = Vector2(576, 320)
+scale = Vector2(11.4687, 6.3868)
+mesh = SubResource("PlaneMesh_x5170")
+
 [node name="usage" type="TextureProgressBar" parent="."]
 layout_mode = 1
 offset_left = 64.0
 offset_top = 64.0
 offset_right = 185.0
 offset_bottom = 185.0
-scale = Vector2(2, 2)
-value = 60.0
+scale = Vector2(3, 3)
+step = 0.0
+rounded = true
 fill_mode = 4
 texture_under = ExtResource("1_q0ugg")
 texture_progress = ExtResource("1_q0ugg")
 tint_under = Color(0.336608, 0.336608, 0.336608, 1)
-tint_progress = Color(0.258824, 0.588235, 1, 1)
 script = ExtResource("2_cxihc")
 
 [node name="indicator" type="Label" parent="usage"]
@@ -47,34 +77,189 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.5
-offset_top = -12.5
-offset_right = 21.5
-offset_bottom = 10.5
+offset_left = -28.5
+offset_top = -17.5
+offset_right = 195.5
+offset_bottom = 61.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "%%%"
+scale = Vector2(0.25, 0.25)
+text = "%%%%"
+label_settings = SubResource("LabelSettings_hu2ae")
+horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="usage"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.5
+offset_top = 6.5
+offset_right = 186.5
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.25, 0.25)
+text = "usage"
+label_settings = SubResource("LabelSettings_e2y3s")
+horizontal_alignment = 1
+
+[node name="clean" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_top = -200.0
+offset_right = 640.0
+offset_bottom = 320.0
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
+tooltip_text = "free up space"
+theme_override_colors/icon_hover_color = Color(0.00597274, 0.686485, 0.697791, 1)
+icon = ExtResource("6_puk35")
+flat = true
+icon_alignment = 1
+
+[node name="upgrade" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 288.0
+offset_top = -200.0
+offset_right = 808.0
+offset_bottom = 320.0
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
+tooltip_text = "buy more disks"
+theme_override_colors/icon_hover_color = Color(0.00597274, 0.686485, 0.697791, 1)
+icon = ExtResource("7_8e5dw")
+flat = true
+icon_alignment = 1
+
+[node name="Label" type="Label" parent="upgrade"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -20.5
-offset_top = 7.0
-offset_right = 25.5
-offset_bottom = 30.0
+offset_left = -180.0
+offset_top = -40.0
+offset_right = 180.0
+offset_bottom = 117.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "usage"
-label_settings = SubResource("LabelSettings_e2y3s")
+text = "$100"
+label_settings = SubResource("LabelSettings_dbc1b")
+horizontal_alignment = 1
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
-visible = false
-position = Vector2(576, 320)
-scale = Vector2(11.4687, 6.3868)
-mesh = SubResource("PlaneMesh_x5170")
+[node name="updatetime" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -188.0
+offset_right = 288.0
+offset_bottom = -65.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "now"
+label_settings = SubResource("LabelSettings_ovudg")
+
+[node name="updatelabel" type="Label" parent="updatetime"]
+layout_mode = 1
+offset_top = -24.0
+offset_right = 174.0
+offset_bottom = 7.0
+text = "update due in:"
+label_settings = SubResource("LabelSettings_j1q2y")
+
+[node name="update" type="Button" parent="updatetime"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -61.5
+offset_right = 400.0
+offset_bottom = 458.5
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.25, 0.25)
+tooltip_text = "update your server"
+theme_override_colors/icon_hover_color = Color(0.00597274, 0.686485, 0.697791, 1)
+icon = ExtResource("9_6lfbc")
+flat = true
+
+[node name="destroy" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "reclaim 80% of your server's value (not including disk upgrades)"
+theme_override_colors/font_hover_color = Color(0.847556, 0.17314, 9.62615e-08, 1)
+theme_override_colors/icon_hover_color = Color(0.847059, 0.172549, 0, 1)
+theme_override_fonts/font = ExtResource("4_7fl54")
+text = "destroy server"
+icon = ExtResource("10_1w31g")
+flat = true
+
+[node name="status" type="CheckButton" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -264.0
+offset_right = 180.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/icon_normal_color = Color(0.914703, 0.522461, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0, 0.811841, 0.606741, 1)
+theme_override_colors/icon_hover_color = Color(0.00597274, 0.686485, 0.697791, 1)
+theme_override_icons/icon = ExtResource("12_b7uug")
+theme_override_icons/checked = ExtResource("12_0fwvm")
+theme_override_icons/unchecked = ExtResource("12_b7uug")
+icon = SubResource("CanvasTexture_usakk")
+flat = true
+expand_icon = true
+
+[node name="logout" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 16.0
+offset_right = 16.0
+offset_bottom = 152.0
+grow_horizontal = 0
+scale = Vector2(0.75, 0.75)
+theme_override_colors/icon_hover_color = Color(0.00597274, 0.686485, 0.697791, 1)
+icon = ExtResource("13_4qwa4")
+flat = true
 
 [connection signal="value_changed" from="usage" to="usage" method="_on_value_changed"]
+[connection signal="pressed" from="clean" to="." method="_on_clean_pressed"]
+[connection signal="pressed" from="updatetime/update" to="." method="_on_update_pressed"]
+[connection signal="button_up" from="status" to="." method="_on_status_button_up"]
+[connection signal="pressed" from="logout" to="." method="logout"]

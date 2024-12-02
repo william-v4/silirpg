@@ -5,8 +5,8 @@ class_name player
 var balance : float = 0
 ## energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 var energy : int = 100
-## servers built in total
-var xp : int = 0
+## servers built in total (1/server) + total uptime (0.01/sec)
+var xp : float = 0
 
 # physics weights
 @export var SPEED = 8
@@ -32,6 +32,8 @@ var inventory = {
 @export var tooltipnode : Label
 # energy needed to build datacenter
 @export var BUILD_ENERGY := 20
+## will be true if player is actively in a 2D UI
+var inpanel : bool = false
 
 # run as soon as node enters scene
 func _ready() -> void:
@@ -55,7 +57,8 @@ func _physics_process(delta: float) -> void:
 	# toggle for raycast debugging
 	# print($"Camera3D/3D cursor".get_collider())
 	# check if player wants to pause
-	pauser()
+	if !inpanel:
+		pauser()
 	# only move if player is supposed to be moving
 	if moving:
 		keymovement(delta)
@@ -88,8 +91,6 @@ func interactor():
 				interact.emit(interactable)
 				# add build to total
 				xp += 1
-				# take energy
-				changenergy(-BUILD_ENERGY)
 		# for the shop items
 		elif "product" in interactable.name:
 			if datacenter_in_hand == null:
@@ -108,6 +109,11 @@ func interactor():
 					transaction(datacenter.prices[datacenter_in_hand])
 					datacenter_in_hand = null
 					$HUD/inventory.update()
+		elif "panel" in interactable.name:
+			tooltipnode.text = "click to log in"
+			if Input.is_action_just_released("click") and moving and !paused:
+				interactable.get_parent().showpanel()
+				pause()
 		else:
 			tooltipnode.text = "click to interact"
 	# if there is no interactable object, leave the tooltip hidden
@@ -127,13 +133,29 @@ func shopchecker(interactable : Node3D, size : datacenter.serversizes):
 		tooltipnode.hide()
 
 #region setters
+## pause the game
+func pause():
+	# disable movement
+	moving = false
+	# release the mouse
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# toggle paused
+	paused = true
+## resume the game
+func resume():
+	# re-enable movement
+	moving = true
+	# capture the mouse
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# game no longer paused
+	paused = false
 # updates energy (set to new value)
 func updateenergy(value : int):
 	energy = value
 	# update UI to match
 	$HUD/energy.update(value)
 # changes energy (change by amount)
-func changenergy(amount : int):
+func changeenergy(amount : int):
 	energy += amount
 	# update UI to match
 	$HUD/energy.update(energy)
@@ -166,20 +188,10 @@ func updateinventory(item, amount : int):
 func pauser():
 	# if the player presses pause key, pause the game
 	if Input.is_action_just_pressed("pause") and !paused:
-		# disable movement
-		moving = false
-		# release the mouse
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		# toggle paused
-		paused = true
+		pause()
 	# if the game is already paused, resume the game when window clicked on
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and paused:
-		# re-enable movement
-		moving = true
-		# capture the mouse
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		# game no longer paused
-		paused = false
+	if Input.is_action_just_released("resume") and paused:
+		resume()
 
 # for wasd + space
 func keymovement(delta):
