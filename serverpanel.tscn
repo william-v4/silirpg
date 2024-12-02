@@ -260,6 +260,7 @@ flat = true
 
 [connection signal="value_changed" from="usage" to="usage" method="_on_value_changed"]
 [connection signal="pressed" from="clean" to="." method="_on_clean_pressed"]
+[connection signal="pressed" from="upgrade" to="." method="_on_upgrade_pressed"]
 [connection signal="pressed" from="updatetime/update" to="." method="_on_update_pressed"]
 [connection signal="button_up" from="status" to="." method="_on_status_button_up"]
 [connection signal="pressed" from="logout" to="." method="logout"]

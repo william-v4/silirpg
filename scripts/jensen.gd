@@ -15,7 +15,7 @@ func _physics_process(delta):
 		$AnimationPlayer.stop()
 		velocity = Vector3.ZERO
 		if $nextposition.is_stopped():
-			print("Jensen navigation finished")
+			# print("Jensen navigation finished")
 			$nextposition.start()
 	direction = (agent.get_next_path_position() - position).normalized()
 	# print(agent.get_next_path_position())
@@ -42,7 +42,7 @@ func _newposition():
 		agent.target_position = NavigationServer3D.region_get_random_point(get_parent().get_node("NavigationRegion3D").get_rid(), 1, false)
 		#agent.target_position = get_parent().get_node("player").position
 		#agent.target_position = Vector3(-60, 0, 0)
-		print("Jensen next target: " + str(agent.target_position))
+		# print("Jensen next target: " + str(agent.target_position))
 		$AnimationPlayer.play("walk")
 	# agent.target_position = Vector3(randf_range(-4, 4), 0, randf_range(-4, 4))
 	

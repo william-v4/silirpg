@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://jdw2d8nt7v7x"]
+[gd_scene load_steps=30 format=4 uid="uid://jdw2d8nt7v7x"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_6usqn"]
 [ext_resource type="Material" uid="uid://c32odyi2s5kww" path="res://assets/materials/water.tres" id="1_g07ml"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dq1mtipnsqe1y" path="res://buildspot.tscn" id="3_hni6i"]
 [ext_resource type="PackedScene" uid="uid://ckno10iy5hxd8" path="res://jensen.tscn" id="4_01t23"]
 [ext_resource type="PackedScene" uid="uid://b0h585th5qarv" path="res://shop.tscn" id="5_uhgqt"]
+[ext_resource type="PackedScene" uid="uid://bbvfxgju5e8v3" path="res://cafe.tscn" id="7_ywubn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7gnrb"]
 sky_top_color = Color(0.866667, 0.368627, 0.14902, 1)
@@ -230,5 +231,17 @@ shape = SubResource("ConcavePolygonShape3D_dpqtd")
 
 [node name="jensen" parent="." instance=ExtResource("4_01t23")]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -66, 2, 31)
+
+[node name="buildspot" parent="." instance=ExtResource("3_hni6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8949, 0, 50.5355)
+
+[node name="buildspot2" parent="." instance=ExtResource("3_hni6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.8949, 0, 12.5355)
+
+[node name="buildspot3" parent="." instance=ExtResource("3_hni6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.8949, 0, 56.5355)
+
+[node name="cafe" parent="." instance=ExtResource("7_ywubn")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -71, 0, 0)
 
 [connection signal="interact" from="player" to="." method="_on_player_interact"]

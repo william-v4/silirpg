@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dduvx6o0kigcy"]
+[gd_scene load_steps=25 format=3 uid="uid://dduvx6o0kigcy"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3pt3x"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="2_fdk8d"]
@@ -13,6 +13,9 @@
 [ext_resource type="FontFile" uid="uid://bl40gboy7y7uk" path="res://assets/fonts/Montserrat-Bold.ttf" id="10_8qyx8"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="12_5amul"]
 [ext_resource type="Texture2D" uid="uid://b3g3qe4yf088c" path="res://assets/icons/server.svg" id="13_enrfy"]
+[ext_resource type="Texture2D" uid="uid://cit0pbj2lf0hv" path="res://assets/icons/coffee.png" id="14_42sgm"]
+[ext_resource type="Texture2D" uid="uid://cs4nuv3ics0ja" path="res://assets/icons/noodles.png" id="15_7ei50"]
+[ext_resource type="Texture2D" uid="uid://c2gw2oi3ylhce" path="res://assets/icons/salad.svg" id="16_c531r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j2l5r"]
 
@@ -183,7 +186,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = -184.0
+offset_top = -165.0
 offset_right = 96.0
 offset_bottom = -32.0
 grow_vertical = 0
@@ -221,6 +224,99 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 8
 text = "M"
+label_settings = SubResource("LabelSettings_2j68d")
+
+[node name="coffee" type="Control" parent="HUD/inventory"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -4.0
+offset_right = 64.0
+offset_bottom = 36.0
+grow_vertical = 2
+
+[node name="coffeeicon" type="Sprite2D" parent="HUD/inventory/coffee"]
+position = Vector2(15, 19)
+scale = Vector2(0.228516, 0.228516)
+texture = ExtResource("14_42sgm")
+
+[node name="count" type="Label" parent="HUD/inventory/coffee"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+text = "10"
+label_settings = SubResource("LabelSettings_2j68d")
+
+[node name="noodles" type="Control" parent="HUD/inventory"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_right = 32.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="noodleicon" type="Sprite2D" parent="HUD/inventory/noodles"]
+position = Vector2(15, 19)
+scale = Vector2(0.228516, 0.228516)
+texture = ExtResource("15_7ei50")
+
+[node name="count" type="Label" parent="HUD/inventory/noodles"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+text = "10"
+label_settings = SubResource("LabelSettings_2j68d")
+
+[node name="salad" type="Control" parent="HUD/inventory"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -36.0
+offset_right = 64.0
+offset_bottom = 4.0
+grow_vertical = 2
+
+[node name="saladicon" type="Sprite2D" parent="HUD/inventory/salad"]
+position = Vector2(15, 20)
+scale = Vector2(0.348633, 0.317383)
+texture = ExtResource("16_c531r")
+
+[node name="count" type="Label" parent="HUD/inventory/salad"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+text = "10"
 label_settings = SubResource("LabelSettings_2j68d")
 
 [node name="fatigue" type="Timer" parent="."]

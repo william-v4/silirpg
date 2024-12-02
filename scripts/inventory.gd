@@ -1,5 +1,11 @@
 extends Control
 
+const foodnodenames := {
+	food.type.COFFEE: "coffee",
+	food.type.SALAD: "salad",
+	food.type.NOODLES: "noodles"
+}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# first, hide what we don't have
@@ -23,4 +29,16 @@ func update():
 	# otherwise, hide it
 	else:
 		$datacenter.hide()
+	# iterate through player food inventory
+	for x in $"../..".inventory:
+		fooditems(foodnodenames[x], $"../..".inventory[x])
 	
+	
+func fooditems(name : String, amount : int):
+	print("updating " + str(name) + " to " + str(amount))
+	var entrynode = get_node(name)
+	if amount == 0:
+		entrynode.hide()
+	else:
+		entrynode.show()
+		entrynode.get_node("count").text = str(amount)

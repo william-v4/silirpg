@@ -66,7 +66,7 @@ func _on_deletion(sector : Button):
 			$result.modulate = SUCCESS
 			# free up space on datacenter
 			if datacenternode is datacenter:
-				datacenternode.usage = datacenternode.usage * 1/3
+				datacenternode.usage = datacenternode.usage * 1/2
 			await get_tree().create_timer(EXIT_DELAY).timeout
 			# exit the minigame
 			queue_free()

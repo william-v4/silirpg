@@ -2,7 +2,7 @@ extends CharacterBody3D
 class_name player
 # main stats
 ## amount of money player has
-var balance : float = 0
+var balance : int = 0
 ## energy (aka stamina). Consumed by moving and doing tasks. Regained by rest and food. If player runs out, they burn out and game over. 
 var energy : int = 100
 ## servers built in total (1/server) + total uptime (0.01/sec)
@@ -49,7 +49,7 @@ func _ready() -> void:
 ## constructor
 ## [param energy] initial energy
 ## [param balance] initial balance
-func init(energy : int, balance : float):
+func init(energy : int, balance : int):
 	updateenergy(energy)
 	updatebalance(balance)
 
@@ -64,6 +64,13 @@ func _physics_process(delta: float) -> void:
 		keymovement(delta)
 		# for player interactions
 		interactor()
+	if energy <= 0:
+		# instance and add game over screen to scene
+		add_child( load("res://gameover.tscn").instantiate() )
+		# disable movement
+		pause()
+	if Input.is_action_just_released("eat"):
+		eat()
 
 # runs whenever input is received (mouse, keyboard, controller)
 func _input(event: InputEvent) -> void:
@@ -114,6 +121,8 @@ func interactor():
 			if Input.is_action_just_released("click") and moving and !paused:
 				interactable.get_parent().showpanel()
 				pause()
+		elif interactable is food:
+			cafechecker(interactable)
 		else:
 			tooltipnode.text = "click to interact"
 	# if there is no interactable object, leave the tooltip hidden
@@ -121,7 +130,7 @@ func interactor():
 		tooltipnode.hide()
 	
 func shopchecker(interactable : Node3D, size : datacenter.serversizes):
-	if balance >= float(datacenter.prices[size]):
+	if balance >= datacenter.prices[size]:
 		tooltipnode.text = "click to buy"
 		if Input.is_action_just_released("click") and moving and !paused:
 			datacenter_in_hand = size
@@ -131,6 +140,17 @@ func shopchecker(interactable : Node3D, size : datacenter.serversizes):
 		tooltipnode.text = "insufficient funds"
 	else:
 		tooltipnode.hide()
+
+func cafechecker(interactable : food):
+	var foodprice = food.prices[interactable.foodtype]
+	if balance >= foodprice:
+		tooltipnode.text = "click to buy"
+		if Input.is_action_just_released("click") and moving and !paused:
+			inventory[interactable.foodtype] += 1
+			transaction(-foodprice)
+			$HUD/inventory.update()
+	elif balance < foodprice:
+		tooltipnode.text = "insufficient funds"
 
 #region setters
 ## pause the game
@@ -183,7 +203,7 @@ func updateinventory(item, amount : int):
 	$HUD/inventory.update()
 #endregion
 
-#region movement
+#region controls
 # for checking if the player wants to pause
 func pauser():
 	# if the player presses pause key, pause the game
@@ -192,6 +212,20 @@ func pauser():
 	# if the game is already paused, resume the game when window clicked on
 	if Input.is_action_just_released("resume") and paused:
 		resume()
+
+func eat():
+	var toconsume := {
+		food.type.COFFEE: 0,
+		food.type.SALAD: 0,
+		food.type.NOODLES: 0
+	}
+	for x in inventory:
+		var hunger : int = 100 - energy
+		while food.energies[x] <= hunger and inventory[x] > 0:
+			inventory[x] -= 1
+			$HUD/inventory.update()
+			changeenergy(food.energies[x])
+			hunger = 100 - energy
 
 # for wasd + space
 func keymovement(delta):

@@ -3,11 +3,17 @@ extends Control
 ## parent of this node (supposed to be a datacenter but not always, such as in debugging)
 var parent
 var loggedout = false
-
+## true if the panel is with the player on a map
+var onthemap : bool
+## for referencing the player
+var playernode : player
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("panel opened")
 	parent = get_parent()
+	if parent is datacenter:
+		onthemap = parent.onthemap
+		playernode = parent.get_parent().get_node("player")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,10 +53,16 @@ func _on_update_pressed():
 	# load update minigame
 	var updategame = load("res://updateminigame.tscn").instantiate()
 	add_child(updategame)
+	playernode.changeenergy(-5)
 
 
 func _on_clean_pressed():
 	var defraggame = load("res://defrag.tscn").instantiate()
 	add_child(defraggame)
 	if parent is datacenter:
-		parent.get_parent().get_node("player").changeenergy(-5)
+		playernode.changeenergy(-5)
+
+# run when user presses upgrade
+func _on_upgrade_pressed():
+	playernode.transaction(-100)
+	parent.capacity += 100

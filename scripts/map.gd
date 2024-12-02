@@ -15,7 +15,7 @@ func _ready():
 	#instance.init(instance.serversizes.SMALL)
 	#add_child(instance)
 	# initiate (constructor) the player
-	$player.init(100, 400)
+	$player.init(10, 1000)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,7 +41,7 @@ func _on_player_interact(interactable):
 		# delete the build spot
 		interactable.free()
 		# take energy
-		$player.changeenergy(-datacenter.prices[$player.datacenter_in_hand]/20)
+		$player.changeenergy(-datacenter.prices[$player.datacenter_in_hand]/50)
 		# the player now no longer has a datacenter in hand
 		$player.datacenter_in_hand = null
 		# and tell player inventory UI about this change

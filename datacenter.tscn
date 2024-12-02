@@ -235,4 +235,5 @@ texture = ExtResource("5_whp3o")
 wait_time = 120.0
 one_shot = true
 
+[connection signal="timeout" from="payment" to="." method="_on_payment_cycle"]
 [connection signal="timeout" from="update" to="." method="_on_update_expired"]

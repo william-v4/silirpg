@@ -14,15 +14,15 @@ const labels : Dictionary = {
 }
 ## prices
 const prices : Dictionary = {
-	serversizes.SMALL: 100,
-	serversizes.MEDIUM: 200,
-	serversizes.LARGE: 600
+	serversizes.SMALL: 500,
+	serversizes.MEDIUM: 1000,
+	serversizes.LARGE: 3000
 }
 ## earn rates / second online
 const rates : Dictionary = {
-	serversizes.SMALL: 0.2,
-	serversizes.MEDIUM: 0.5,
-	serversizes.LARGE: 2
+	serversizes.SMALL: 1,
+	serversizes.MEDIUM: 2,
+	serversizes.LARGE: 4
 }
 ## color of label when server online
 @export var ONLINE_COLOUR = Color(0, 0.75, 0.5) # green
@@ -42,9 +42,16 @@ var usage : float = 0
 var capacity : float = 100
 ## if the server is out of date
 var outdated := true
+## will be true if the datacenter is indeed where it should be (on the map with player)
+var onthemap : bool
+## player node
+var playernode : player
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if "Map" in get_parent().name:
+		onthemap = true
+		playernode = get_parent().get_node("player")
 	print("datacenter built at: " + str(transform))
 	# set status
 	status(false)
@@ -71,22 +78,22 @@ func _process(delta):
 			get_node("serverpanel").free()
 			get_parent().get_node("player").resume()
 	#if "Map" in get_parent().name:
-		#if get_node("serverpanel") == null and !get_parent().get_node("player").moving:
-			#get_parent().get_node("player").resume()
+		#get_parent().get_node("player").changebalance()
 	# 50% chance of increasing usage by delta
 	if randi() % 2 and online:
 		# print(usage)
-		usage += delta / (price / 20)
+		usage += delta / (price / 100)
 
 func status(newstat : bool):
 	online = newstat
 	if online:
 		$sizelabel.modulate = ONLINE_COLOUR
+		$payment.start()
 	else:
 		$sizelabel.modulate = OFFLINE_COLOUR
+		$payment.stop()
 
 func showpanel():
-	var playernode = get_parent().get_node("player")
 	playernode.rotation.y = -$panel.rotation.y
 	playernode.pause
 	var serverpanelinstance = load("res://serverpanel.tscn").instantiate()
@@ -97,9 +104,6 @@ func update():
 	$update.start(round(randf() * 120) + 60 )
 	status(true)
 	outdated = false
-	get_parent().get_node("player").changeenergy(-5)
-
-	
 
 # populate datacenters with server racks based on size
 func buildracks(size : serversizes):
@@ -144,11 +148,13 @@ func buildracks(size : serversizes):
 		add_child(rackinstance)
 
 func destroy():
-	get_parent().get_node("player").transaction(price * 0.8)
-	var buildspot = load("res://buildspot.tscn").instantiate()
-	get_parent().add_child(buildspot)
-	buildspot.transform = transform
-	queue_free()
+	if onthemap:
+		playernode.transaction(round(price * 0.8))
+		var buildspot = load("res://buildspot.tscn").instantiate()
+		buildspot.transform = transform
+		get_parent().add_child(buildspot)
+		hide()
+		queue_free()
 
 # when update timer runs out
 func _on_update_expired():
@@ -157,3 +163,9 @@ func _on_update_expired():
 	# server now outdated
 	outdated = true
 	print("server out of date")
+
+# run when the payment timer runs out
+func _on_payment_cycle():
+	if onthemap:
+		playernode.transaction(rates[serversize])
+		$payment.start()
