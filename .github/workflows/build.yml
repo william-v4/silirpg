@@ -18,6 +18,7 @@ jobs:
         with:
           version: 4.3.0
           use-dotnet: false
+          include-templates: true
       - name: export for web
         run: |
           mkdir -p export
