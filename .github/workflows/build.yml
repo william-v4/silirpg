@@ -1,0 +1,37 @@
+name: build
+on:
+  push:
+    branches:
+    - 'main'
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout main branch
+        with:
+          ref: main
+      - uses: chickensoft-games/setup-godot@v1
+        name: install Godot
+        with:
+          version: 4.3.0
+          use-dotnet: false
+      - name: export for web
+        run: |
+          mkdir -p export
+          godot --headless --export-release "HTML5" "export/index.html"
+      - uses: actions/checkout@v4
+        name: checkout deployment branch (prod)
+        with:
+          ref: prod
+          path: prod
+      - name: copy, commit, and push to prod
+        run: |
+          cp -r export/* prod/ # copy all exported files to root of prod
+          cd prod
+          git add .
+          git config --local user.name "Github Actions autodeploy"
+          git commit -m "Deploy Godot project to GitHub Pages"
+          git push origin prod
