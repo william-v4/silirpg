@@ -152,8 +152,8 @@ func interactor():
 			if Input.is_action_just_released("click") and moving and !paused:
 				# if player has a datacenter in hand
 				if datacenter_in_hand != null:
-					# credit player with the price of that datacenter
-					transaction(datacenter.prices[datacenter_in_hand])
+					# TODO credit player with the price of that datacenter (use global price instead)
+					transaction(get_parent().prices[datacenter_in_hand])
 					# remove from hand
 					datacenter_in_hand = null
 					# tell inventory to update
@@ -173,7 +173,7 @@ func interactor():
 			cafechecker(interactable)
 		else:
 			# if all of the above don't match, show generic message
-			tooltipnode.text = "click to interact"
+			tooltipnode.text = ""
 	# if there is no interactable object, leave the tooltip hidden
 	else:
 		tooltipnode.hide()
@@ -181,20 +181,20 @@ func interactor():
 ## run in interactor for every server in the shop
 #                object in question     the size of that dataenter object
 func shopchecker(interactable : Node3D, size : datacenter.serversizes):
-	# check if player has enough balance
-	if balance >= datacenter.prices[size]:
+	# TODO check if player has enough balance (use global price instead)
+	if balance >= get_parent().prices[size]:
 		# if yes, prompt to buy
 		tooltipnode.text = "click to buy"
 		# if player clicks
 		if Input.is_action_just_released("click") and moving and !paused:
 			# give the player the datacenter
 			datacenter_in_hand = size
-			# deduct the price of that datacenter from balance
-			transaction(-datacenter.prices[size])
+			# TODO deduct the price of that datacenter from balance (use global price instead)
+			transaction(-get_parent().prices[size])
 			# tell inventory about the change
 			$HUD/inventory.update()
-	# if player does not have enough balance to purchase datacenter
-	elif balance < datacenter.prices[size]:
+	# TODO if player does not have enough balance to purchase datacenter (use global price instead)
+	elif balance < get_parent().prices[size]:
 		# let player know
 		tooltipnode.text = "insufficient funds"
 	# if for whatever reason all of the above is not satisfied
@@ -369,6 +369,7 @@ func cammovement(event : InputEvent):
 
 # emitted when background sountrack player done playing
 func _on_background_finished():
-	# load and play background soundtrack
-	$background.stream = load("res://assets/audio/silirpg-ambient.mp3")
+	# TODO load and play background soundtrack (pick random between 2)
+	randomize()
+	$background.stream = load("res://assets/audio/silirpg-ambient-remaster.mp3") if randi() % 2 else load("res://assets/audio/silirpg-ambient2.mp3")
 	$background.play()

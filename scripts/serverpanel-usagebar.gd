@@ -10,8 +10,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# change colour of bar according to interpolation between LOW_COLOUR to HIGH_COLOUR based on percentage of value
-	tint_progress = LOW_COLOUR.lerp(HIGH_COLOUR, value / 100)
+	# TODO change colour of bar according to interpolation between LOW_COLOUR to HIGH_COLOUR based on percentage of value (change constant to capacity variable)
+	tint_progress = LOW_COLOUR.lerp(HIGH_COLOUR, value / get_parent().get_parent().capacity)
 	# update indicator text
 	$indicator.text = str(value)
 	# do the same for indicator text

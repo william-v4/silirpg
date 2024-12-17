@@ -331,7 +331,6 @@ label_settings = SubResource("LabelSettings_2j68d")
 
 [node name="background" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_3w47c")
-volume_db = 9.53
 
 [connection signal="value_changed" from="HUD/energy" to="HUD/energy" method="_on_value_changed"]
 [connection signal="timeout" from="HUD/dialogue/typing" to="HUD/dialogue" method="_on_typing_timeout"]

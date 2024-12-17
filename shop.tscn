@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://b0h585th5qarv"]
+[gd_scene load_steps=29 format=3 uid="uid://b0h585th5qarv"]
 
 [ext_resource type="Texture2D" uid="uid://cies3y8viif1b" path="res://assets/icons/serverforge.svg" id="1_hljau"]
+[ext_resource type="Script" path="res://scripts/shop.gd" id="1_tfw51"]
 [ext_resource type="PackedScene" uid="uid://ce20i0jeryxo1" path="res://rack_l.tscn" id="2_uo5to"]
 [ext_resource type="FontFile" uid="uid://cvpjc3n6e14oa" path="res://assets/fonts/Montserrat-Regular.ttf" id="3_efgvw"]
 [ext_resource type="PackedScene" uid="uid://btqwygspmnxc8" path="res://rack_m.tscn" id="3_yuga2"]
@@ -77,6 +78,7 @@ data = PackedVector3Array(0, 2, 4, 0, 2, 4, 0, -2, 4, 0, 2, 4, 0, -2, 4, 0, -2, 
 size = Vector3(8, 4, 0)
 
 [node name="shop" type="Node3D"]
+script = ExtResource("1_tfw51")
 
 [node name="roof" type="CSGCombiner3D" parent="."]
 

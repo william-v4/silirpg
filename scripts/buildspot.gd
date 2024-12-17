@@ -17,4 +17,5 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	# TODO disable datacenter interaction layer if group (parent) hidden
+	$CollisionShape3D.disabled = false if get_parent().visible else true

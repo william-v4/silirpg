@@ -30,6 +30,9 @@ func _process(delta):
 			value -= 1
 			# turn colour to LOSS_COLOUR
 			modulate = LOSS_COLOUR
+		# TODO if target networth is too far (more than 300), just set it
+		if abs(targetnetworth - value) > 300:
+			value = targetnetworth
 	# if player networth is negative, 
 	if value < 0:
 		# turn the counter red

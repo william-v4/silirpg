@@ -12,8 +12,8 @@ const labels : Dictionary = {
 	serversizes.MEDIUM: "M",
 	serversizes.LARGE: "L"
 }
-## prices
-const prices : Dictionary = {
+## TODO prices (are supposed to be variable)
+var prices : Dictionary = {
 	serversizes.SMALL: 500,
 	serversizes.MEDIUM: 1000,
 	serversizes.LARGE: 3000
@@ -29,6 +29,12 @@ const xp : Dictionary = {
 	serversizes.SMALL: 10,
 	serversizes.MEDIUM: 20,
 	serversizes.LARGE: 50
+}
+# TODO datacenter build energies
+const buildenergies : Dictionary = {
+	datacenter.serversizes.SMALL: 10,
+	datacenter.serversizes.MEDIUM: 20,
+	datacenter.serversizes.LARGE: 60
 }
 ## color of label when server online
 @export var ONLINE_COLOUR = Color(0, 0.75, 0.5) # green
@@ -85,8 +91,8 @@ func _process(delta):
 	
 	# 50% chance of increasing usage when online
 	if randi() % 2 and online and usage < capacity:
-		# usage increase scales with server size (referencing price here)
-		usage += delta / (price / 100)
+		# TODO usage increase scales with server size (referencing xp here cause price changes)
+		usage += delta * (price / 500)
 	# if the disk is filled, the server becomes offline
 	if usage >= capacity:
 		status(false)
@@ -119,17 +125,6 @@ func showpanel():
 	serverpanelinstance.queue_free()
 	# resume player movement
 	playernode.resume()
-	# delete the serverpanel if there is one to be deleted (apparently it cannot delete itself for some reason)
-	# panelcloser()
-	
-func panelcloser():
-	while get_node("serverpanel") != null:
-		# logged out means it is to be deleted
-		if get_node("serverpanel").loggedout:
-			# delete the panel
-			get_node("serverpanel").free()
-			# renenable movement
-			get_parent().get_node("player").resume()
 
 # finish updating server
 func update():

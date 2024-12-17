@@ -80,8 +80,8 @@ func _on_upgrade_pressed():
 	if playernode.balance >= 100:
 		# if yes, deduct the cost of new disk
 		playernode.transaction(-100)
-	# add another 100% to datacenter capacity
-	parent.capacity += 100
+	# TODO add another 100% to datacenter capacity (scaled with xp) [change weights]
+	parent.capacity += round(500*100 / ((get_parent().playernode.xp + 1)) )
 
 # called by destroy button
 func _on_destroy_pressed():
