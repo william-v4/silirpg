@@ -19,4 +19,4 @@ jobs:
           git config --global user.name "Github Actions autodeploy"
           git add dist
           git commit -m "autodeploy project to GitHub Pages"
-          git subtree push --prefix dist origin gh-pages
+          git subtree split --branch gh-pages --prefix dist/
