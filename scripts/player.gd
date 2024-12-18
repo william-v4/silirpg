@@ -46,6 +46,8 @@ var lastpayoutxp : int = 0
 var xpmessage := false
 ## true when player dead
 var dead := false
+## true if ending played
+var ending := false
 
 # run as soon as node enters scene
 func _ready() -> void:
@@ -103,6 +105,15 @@ func _physics_process(delta: float) -> void:
 	if xp % XPBONUSPOINT == 0 and xp != lastpayoutxp:
 		# give xp bonus
 		xppayout()
+	# TODO play ending when xp reaches 10000
+	if xp >= 10000 and !ending:
+		# let player knoe
+		$HUD/dialogue.update("Congratulations. You've restored Silicon Valley! You can continue playing.")
+		# load and play final song
+		$background.stream = load("res://assets/audio/silirpgtheme.mp3")
+		$background.play()
+		# prevent rerun
+		ending = true
 
 # runs whenever input is received (mouse, keyboard, controller)
 func _input(event: InputEvent) -> void:

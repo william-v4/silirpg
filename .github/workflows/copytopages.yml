@@ -1,0 +1,28 @@
+name: copy to github pages
+on:
+  push:
+    branches:
+    - 'main'
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout main branch
+        with:
+          ref: main
+      - uses: actions/checkout@v4
+        name: checkout deployment branch (prod)
+        with:
+          ref: prod
+          path: prod
+      - name: copy, commit, and push to prod
+        run: |
+          cp -r dist/* prod/ # copy all exported files to root of prod
+          cd prod
+          git add .
+          git config --local user.name "Github Actions autodeploy"
+          git commit -m "Deploy Godot project to GitHub Pages"
+          git push origin prod
