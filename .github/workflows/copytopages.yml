@@ -13,17 +13,10 @@ jobs:
         name: checkout main branch
         with:
           ref: main
-      - uses: actions/checkout@v4
-        name: checkout deployment branch (prod)
-        with:
-          ref: prod
-          path: prod
-      - name: copy, commit, and push to prod
+      - name: push to gh-pages
         run: |
-          cp -r dist/* prod/ # copy all exported files to root of prod
-          cd prod
           git config --global user.email "3002590@school.ecsd.net"
           git config --global user.name "Github Actions autodeploy"
-          git add .
-          git commit -m "Deploy Godot project to GitHub Pages"
-          git push origin prod
+          git add dist
+          git commit -m "autodeploy project to GitHub Pages"
+          git subtree push --prefix dist origin gh-pages
